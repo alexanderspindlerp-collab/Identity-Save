@@ -1,1 +1,33 @@
-recipe.yaml
+$engine: $engine: 3
+$onesync: on
+
+name: Identity Under Udvikling
+version: 1.0.0
+author: Grizzy/Alex
+description: >-
+  Dansk content-baseret RP med fokus på spillernes
+  ønsker og idéer.
+
+tasks:
+  # Hent FiveMs standardressourcer
+  - action: download_github
+    src: https://github.com/citizenfx/cfx-server-data
+    ref: master
+    subpath: resources
+    dest: ./resources
+
+  # Fjern den gamle chat-ressource
+  - action: remove_path
+    path: ./resources/[gameplay]/chat
+
+  # Hent dine egne scripts fra GitHub
+  - action: download_github
+    src: https://github.com/DIT-BRUGERNAVN/DIT-REPOSITORY
+    ref: main
+    subpath: resources/[custom]
+    dest: ./resources/[custom]
+
+  # Hent din serverkonfiguration
+  - action: download_file
+    url: https://raw.githubusercontent.com/DIT-BRUGERNAVN/DIT-REPOSITORY/main/server.cfg
+    path: ./server.cfg
