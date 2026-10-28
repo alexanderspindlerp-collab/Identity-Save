@@ -1,33 +1,153 @@
-$engine: $engine: 3
-$onesync: on
-
-name: Identity Under Udvikling
-version: 1.0.0
+# Identity-Save / main – upload filerne i roden.
+$engine: 3
+$onesync: 'on'
+$minFxVersion: 12913
+name: Identity ESX
+version: 0.2.0
 author: Grizzy/Alex
-description: >-
-  Dansk content-baseret RP med fokus på spillernes
-  ønsker og idéer.
-
+description: Identity custom ESX Legacy-base med ox inventory, voice og braendstof. Henter afhaengigheder automatisk.
+  Kun til ny database.
 tasks:
-  # Hent FiveMs standardressourcer
-  - action: download_github
-    src: https://github.com/citizenfx/cfx-server-data
-    ref: master
-    subpath: resources
-    dest: ./resources
-
-  # Fjern den gamle chat-ressource
-  - action: remove_path
-    path: ./resources/[gameplay]/chat
-
-  # Hent dine egne scripts fra GitHub
-  - action: download_github
-    src: https://github.com/DIT-BRUGERNAVN/DIT-REPOSITORY
-    ref: main
-    subpath: resources/[custom]
-    dest: ./resources/[custom]
-
-  # Hent din serverkonfiguration
-  - action: download_file
-    url: https://raw.githubusercontent.com/DIT-BRUGERNAVN/DIT-REPOSITORY/main/server.cfg
-    path: ./server.cfg
+- action: connect_database
+- action: download_github
+  src: https://github.com/alexanderspindlerp-collab/Identity-Save
+  ref: main
+  dest: ./tmp/identity
+  timeoutSeconds: 900
+- action: copy_path
+  src: ./tmp/identity/server.cfg
+  dest: ./server.cfg
+- action: copy_path
+  src: ./tmp/identity/config
+  dest: ./config
+- action: download_github
+  src: https://github.com/citizenfx/cfx-server-data
+  ref: c6afa3909c763e3327ed76825e78453286c99f05
+  subpath: resources
+  dest: ./resources/[cfx-default]
+  timeoutSeconds: 900
+- action: remove_path
+  path: ./resources/[cfx-default]/[gameplay]/chat
+- action: download_github
+  src: https://github.com/esx-framework/esx_core
+  ref: 82188ac7616e6c1bfc96d82854b8ff3edf095526
+  dest: ./tmp/core
+  timeoutSeconds: 900
+- action: query_database
+  file: ./tmp/core/[SQL]/legacy.sql
+- action: copy_path
+  src: ./tmp/core/[core]/es_extended
+  dest: ./resources/[core]/es_extended
+- action: copy_path
+  src: ./tmp/core/[core]/skinchanger
+  dest: ./resources/[core]/skinchanger
+- action: copy_path
+  src: ./tmp/core/[core]/esx_skin
+  dest: ./resources/[core]/esx_skin
+- action: copy_path
+  src: ./tmp/core/[core]/esx_identity
+  dest: ./resources/[core]/esx_identity
+- action: copy_path
+  src: ./tmp/core/[core]/esx_multicharacter
+  dest: ./resources/[core]/esx_multicharacter
+- action: copy_path
+  src: ./tmp/core/[core]/esx_menu_default
+  dest: ./resources/[core]/esx_menu_default
+- action: copy_path
+  src: ./tmp/core/[core]/esx_menu_list
+  dest: ./resources/[core]/esx_menu_list
+- action: copy_path
+  src: ./tmp/core/[core]/esx_menu_dialog
+  dest: ./resources/[core]/esx_menu_dialog
+- action: copy_path
+  src: ./tmp/core/[core]/esx_context
+  dest: ./resources/[core]/esx_context
+- action: copy_path
+  src: ./tmp/core/[core]/esx_notify
+  dest: ./resources/[core]/esx_notify
+- action: copy_path
+  src: ./tmp/core/[core]/esx_progressbar
+  dest: ./resources/[core]/esx_progressbar
+- action: copy_path
+  src: ./tmp/core/[core]/esx_textui
+  dest: ./resources/[core]/esx_textui
+- action: copy_path
+  src: ./tmp/core/[core]/cron
+  dest: ./resources/[core]/cron
+- action: copy_path
+  src: ./tmp/core/[core]/esx_chat_theme
+  dest: ./resources/[core]/esx_chat_theme
+- action: download_github
+  src: https://github.com/esx-framework/ESX-Legacy-Addons
+  ref: 973ae5390b61e3e6e6e2f507fe8d13cb8d2370af
+  dest: ./tmp/addons
+  timeoutSeconds: 900
+- action: copy_path
+  src: ./tmp/addons/[esx_addons]/esx_addonaccount
+  dest: ./resources/[esx-support]/esx_addonaccount
+- action: copy_path
+  src: ./tmp/addons/[esx_addons]/esx_datastore
+  dest: ./resources/[esx-support]/esx_datastore
+- action: copy_path
+  src: ./tmp/addons/[esx_addons]/esx_billing
+  dest: ./resources/[esx-support]/esx_billing
+- action: copy_path
+  src: ./tmp/addons/[esx_addons]/esx_society
+  dest: ./resources/[esx-support]/esx_society
+- action: copy_path
+  src: ./tmp/addons/[esx_addons]/esx_license
+  dest: ./resources/[esx-support]/esx_license
+- action: copy_path
+  src: ./tmp/addons/[esx_addons]/esx_service
+  dest: ./resources/[esx-support]/esx_service
+- action: copy_path
+  src: ./tmp/addons/[esx_addons]/esx_status
+  dest: ./resources/[esx-support]/esx_status
+- action: download_file
+  url: https://github.com/overextended/oxmysql/releases/download/v2.14.3/oxmysql.zip
+  path: ./tmp/oxmysql.zip
+  timeoutSeconds: 900
+- action: unzip
+  src: ./tmp/oxmysql.zip
+  dest: ./resources/[ox]
+- action: download_file
+  url: https://github.com/overextended/ox_lib/releases/download/v3.41.0/ox_lib.zip
+  path: ./tmp/ox_lib.zip
+  timeoutSeconds: 900
+- action: unzip
+  src: ./tmp/ox_lib.zip
+  dest: ./resources/[ox]
+- action: download_file
+  url: https://github.com/overextended/ox_target/releases/download/v1.18.1/ox_target.zip
+  path: ./tmp/ox_target.zip
+  timeoutSeconds: 900
+- action: unzip
+  src: ./tmp/ox_target.zip
+  dest: ./resources/[ox]
+- action: download_file
+  url: https://github.com/overextended/ox_inventory/releases/download/v2.48.1/ox_inventory.zip
+  path: ./tmp/ox_inventory.zip
+  timeoutSeconds: 900
+- action: unzip
+  src: ./tmp/ox_inventory.zip
+  dest: ./resources/[ox]
+- action: download_github
+  src: https://github.com/AvarianKnight/pma-voice
+  ref: 6c9d96ed7a02e30912f1a0ce92629bf9afbbca8c
+  dest: ./resources/[standalone]/pma-voice
+  timeoutSeconds: 900
+- action: download_github
+  src: https://github.com/overextended/ox_fuel
+  ref: 84f93ba2a3e24a663514c65cb9b3965c703ffed1
+  dest: ./resources/[standalone]/ox_fuel
+  timeoutSeconds: 900
+- action: download_github
+  src: https://github.com/mkafrin/PolyZone
+  ref: 0f9003080706d61ff29b9b3db5332d407632d4df
+  dest: ./resources/[standalone]/PolyZone
+  timeoutSeconds: 900
+- action: replace_string
+  mode: all_vars
+  file: ./server.cfg
+- action: remove_path
+  path: ./tmp
