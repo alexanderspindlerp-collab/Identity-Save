@@ -1,0 +1,20 @@
+CREATE TABLE IF NOT EXISTS `esx_garage_locations` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(64) NOT NULL,
+  `label` VARCHAR(128) NOT NULL,
+  `entry_x` DOUBLE NOT NULL,
+  `entry_y` DOUBLE NOT NULL,
+  `entry_z` DOUBLE NOT NULL,
+  `spawn_x` DOUBLE NOT NULL,
+  `spawn_y` DOUBLE NOT NULL,
+  `spawn_z` DOUBLE NOT NULL,
+  `spawn_heading` DOUBLE NOT NULL DEFAULT 0,
+  `spawn_points` LONGTEXT NULL,
+  `sprite` INT NOT NULL DEFAULT 357,
+  `scale` DOUBLE NOT NULL DEFAULT 0.8,
+  `colour` INT NOT NULL DEFAULT 3,
+  `impounded_name` VARCHAR(64) NOT NULL DEFAULT 'LosSantos',
+  `created_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

@@ -1,12 +1,11 @@
-# Identity-Save / main – upload filerne i roden.
+# Identity-Save / main
 $engine: 3
 $onesync: 'on'
 $minFxVersion: 12913
 name: Identity ESX
-version: 0.2.0
+version: 0.3.0
 author: Grizzy/Alex
-description: Identity custom ESX Legacy-base med ox inventory, voice og braendstof. Henter afhaengigheder automatisk.
-  Kun til ny database.
+description: Identity custom ESX Legacy-base med danske scripts. Brug en tom database.
 tasks:
 - action: connect_database
 - action: download_github
@@ -20,6 +19,9 @@ tasks:
 - action: copy_path
   src: ./tmp/identity/config
   dest: ./config
+- action: copy_path
+  src: ./tmp/identity/resources
+  dest: ./resources
 - action: download_github
   src: https://github.com/citizenfx/cfx-server-data
   ref: c6afa3909c763e3327ed76825e78453286c99f05
@@ -103,6 +105,21 @@ tasks:
 - action: copy_path
   src: ./tmp/addons/[esx_addons]/esx_status
   dest: ./resources/[esx-support]/esx_status
+- action: copy_path
+  src: ./tmp/addons/[esx_addons]/esx_addoninventory
+  dest: ./resources/[esx-support]/esx_addoninventory
+- action: copy_path
+  src: ./tmp/addons/[esx_addons]/esx_animations
+  dest: ./resources/[esx-support]/esx_animations
+- action: copy_path
+  src: ./tmp/addons/[esx_addons]/esx_shops
+  dest: ./resources/[esx-support]/esx_shops
+- action: copy_path
+  src: ./tmp/addons/[esx_addons]/esx_vehicleshop
+  dest: ./resources/[esx-support]/esx_vehicleshop
+- action: copy_path
+  src: ./tmp/addons/[esx_addons]/esx_weaponshop
+  dest: ./resources/[esx-support]/esx_weaponshop
 - action: download_file
   url: https://github.com/overextended/oxmysql/releases/download/v2.14.3/oxmysql.zip
   path: ./tmp/oxmysql.zip

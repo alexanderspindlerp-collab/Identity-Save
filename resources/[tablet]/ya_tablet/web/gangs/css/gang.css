@@ -1,0 +1,283 @@
+/* st_gangs-inspireret Bande-app */
+.bande-shell {
+  height: 100%;
+  min-height: 0;
+  flex: 1;
+  background: linear-gradient(180deg, #1a4d35 0%, #0f1f18 42%, #0b1410 100%);
+  display: flex;
+  flex-direction: column;
+}
+
+.bande-nav {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 14px 0;
+  overflow-x: auto;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.bande-nav-btn {
+  border: 0;
+  background: transparent;
+  color: rgba(255,255,255,0.55);
+  padding: 10px 14px 12px;
+  border-radius: 10px 10px 0 0;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 72px;
+}
+.bande-nav-btn svg { width: 18px; height: 18px; fill: currentColor; opacity: 0.85; }
+.bande-nav-btn.active {
+  color: #fff;
+  background: rgba(0,0,0,0.22);
+  box-shadow: inset 0 -2px 0 #4dffc8;
+}
+.bande-nav-btn.disabled { opacity: 0.35; cursor: not-allowed; }
+.bande-nav-btn .nav-badge {
+  position: absolute;
+  margin-top: -4px;
+  margin-left: 28px;
+  background: #ff5c6a;
+  color: #fff;
+  font-size: 9px;
+  border-radius: 99px;
+  padding: 1px 5px;
+}
+
+.bande-panel { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+
+.bande-map-wrap {
+  position: relative;
+  flex: 1;
+  min-height: 480px;
+  margin: 12px 14px 14px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: #07131d;
+}
+
+#gang-leaflet-map {
+  width: 100%;
+  height: 100%;
+  min-height: 480px;
+  background: #0a1519;
+  z-index: 1;
+}
+#gang-leaflet-map.map-fallback {
+  background:
+    linear-gradient(rgba(77, 255, 200, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(77, 255, 200, 0.05) 1px, transparent 1px),
+    #0c1f2e;
+  background-size: 40px 40px, 40px 40px, 100% 100%;
+}
+
+.map-missing-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 52px;
+  transform: translateX(-50%);
+  z-index: 520;
+  max-width: 90%;
+  text-align: center;
+  padding: 8px 14px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 11px;
+  pointer-events: none;
+}
+.map-missing-hint strong { color: #4dffc8; font-weight: 700; }
+
+.map-overlay-stats {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 500;
+  background: rgba(10,16,14,0.88);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 11px;
+  color: #dce7e2;
+  min-width: 140px;
+}
+.map-overlay-stats .bar {
+  height: 6px;
+  border-radius: 99px;
+  background: rgba(255,255,255,0.1);
+  margin-top: 6px;
+  overflow: hidden;
+}
+.map-overlay-stats .bar > span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #22c55e, #4dffc8);
+  border-radius: 99px;
+}
+
+.map-tools {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 500;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.map-tools button {
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.94);
+  color: #111;
+  cursor: pointer;
+  font-size: 16px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+}
+.map-tools button.active {
+  background: #4dffc8;
+  color: #04140d;
+}
+
+.zone-popup-card {
+  min-width: 180px;
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+.zone-popup-card h4 { margin: 0 0 6px; font-size: 14px; color: #fff; }
+.zone-popup-card p { margin: 0 0 10px; font-size: 11px; color: rgba(255,255,255,0.65); }
+.zone-popup-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.zone-popup-actions button {
+  border: 0;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  background: rgba(59,130,246,0.85);
+  color: #fff;
+}
+.zone-popup-actions button.danger { background: rgba(239,68,68,0.9); }
+
+.gang-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(6px);
+  z-index: 2000;
+  display: grid;
+  place-items: center;
+}
+.gang-modal {
+  width: min(320px, 88vw);
+  background: rgba(18,24,22,0.96);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 14px;
+  overflow: hidden;
+  color: #fff;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.55);
+}
+.gang-modal h3 {
+  padding: 16px 16px 8px;
+  font-size: 15px;
+  text-align: center;
+}
+.gang-modal input {
+  display: block;
+  width: calc(100% - 32px);
+  margin: 8px 16px 16px;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(0,0,0,0.3);
+  color: #fff;
+  font-size: 13px;
+}
+.gang-modal-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+.gang-modal-actions button {
+  border: 0;
+  background: transparent;
+  color: #60a5fa;
+  padding: 14px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.gang-modal-actions button + button {
+  border-left: 1px solid rgba(255,255,255,0.1);
+}
+
+.bande-forside {
+  padding: 14px 16px 18px;
+  display: grid;
+  gap: 12px;
+}
+.bande-forside-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 12px;
+}
+
+.leaflet-container { background: transparent !important; font-family: inherit; }
+.leaflet-pane.leaflet-tile-pane img { max-width: none !important; }
+.leaflet-popup-content-wrapper {
+  background: rgba(12,18,16,0.95) !important;
+  color: #fff !important;
+  border-radius: 10px !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+}
+.leaflet-popup-tip { background: rgba(12,18,16,0.95) !important; }
+
+.gang-toast {
+  position: fixed;
+  top: 52px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  background: rgba(12,18,16,0.94);
+  border: 1px solid rgba(255,255,255,0.14);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.45);
+  animation: gang-toast-in 0.2s ease;
+}
+.gang-toast .icon { font-size: 18px; }
+.gang-toast .sub { font-size: 10px; opacity: 0.55; font-weight: 500; }
+@keyframes gang-toast-in {
+  from { opacity: 0; transform: translateX(-50%) translateY(-8px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+.draw-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  z-index: 500;
+  background: rgba(0,0,0,0.7);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.75);
+  pointer-events: none;
+}

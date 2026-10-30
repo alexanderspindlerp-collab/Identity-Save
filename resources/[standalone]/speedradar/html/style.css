@@ -1,0 +1,128 @@
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    overflow: hidden;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #dfffea;
+    background: transparent;
+}
+.hidden { display: none !important; }
+.radar { position: fixed; inset: 0; pointer-events: none; }
+.scope { position: fixed; inset: 0; }
+.vignette {
+    position: absolute; inset: 0;
+    background: radial-gradient(circle, rgba(0,0,0,0) 34%, rgba(0,0,0,.55) 56%, rgba(0,0,0,.92) 78%);
+}
+.crosshair { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: rgba(205,255,225,.8); box-shadow: 0 0 8px rgba(205,255,225,.7); }
+.crosshair.horizontal { width: 260px; height: 2px; }
+.crosshair.vertical { width: 2px; height: 180px; }
+.corner { position: absolute; width: 70px; height: 70px; border-color: rgba(205,255,225,.9); }
+.tl { left: 31%; top: 22%; border-left: 3px solid; border-top: 3px solid; }
+.tr { right: 31%; top: 22%; border-right: 3px solid; border-top: 3px solid; }
+.bl { left: 31%; bottom: 22%; border-left: 3px solid; border-bottom: 3px solid; }
+.br { right: 31%; bottom: 22%; border-right: 3px solid; border-bottom: 3px solid; }
+.hint { position: absolute; bottom: 7%; left: 50%; transform: translateX(-50%); font-size: 13px; letter-spacing: 2px; color: rgba(230,255,240,.7); }
+.panel {
+    position: absolute;
+    right: 42px;
+    bottom: 42px;
+    width: 360px;
+    padding: 18px;
+    border: 2px solid rgba(152,255,192,.55);
+    border-radius: 8px;
+    background: linear-gradient(180deg, rgba(1,27,16,.82), rgba(0,8,6,.88));
+    box-shadow: 0 0 24px rgba(56,255,148,.15), inset 0 0 18px rgba(56,255,148,.08);
+}
+.topline { font-size: 13px; letter-spacing: 2px; opacity: .9; margin-bottom: 8px; }
+.status { font-size: 12px; color: #88ffaa; margin-bottom: 14px; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; }
+.label { display: block; font-size: 11px; color: rgba(223,255,234,.55); letter-spacing: 1px; }
+.value { font-family: 'Courier New', monospace; font-size: 38px; font-weight: 700; line-height: 1; }
+.value.small { font-size: 26px; }
+.unit { font-size: 13px; margin-left: 4px; opacity: .72; }
+.platebox { grid-column: span 1; }
+.plate { display: inline-block; margin-top: 5px; padding: 4px 8px; background: #e9e9d2; color: #111; font-weight: 800; font-size: 22px; letter-spacing: 2px; border-radius: 3px; }
+.history-title { margin-top: 18px; padding-top: 13px; border-top: 1px solid rgba(152,255,192,.25); font-size: 12px; letter-spacing: 1px; opacity: .8; }
+.history { margin-top: 8px; max-height: 180px; overflow: hidden; }
+.history-row { display: grid; grid-template-columns: 48px 1fr 78px 52px; gap: 6px; padding: 5px 0; font-size: 12px; border-bottom: 1px solid rgba(152,255,192,.1); }
+.history-row b { color: #fff; letter-spacing: 1px; }
+.empty { font-size: 12px; opacity: .5; padding: 7px 0; }
+
+.printout {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.55);
+    font-family: Arial, Helvetica, sans-serif;
+    z-index: 50;
+}
+
+.paper {
+    width: 760px;
+    max-height: 86vh;
+    overflow: auto;
+    background: #f7f3e8;
+    color: #161616;
+    padding: 28px;
+    border-radius: 8px;
+    box-shadow: 0 20px 80px rgba(0,0,0,.55);
+}
+
+.paper-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    border-bottom: 2px solid #222;
+    padding-bottom: 14px;
+    margin-bottom: 16px;
+}
+
+.paper-header h1 {
+    margin: 0;
+    font-size: 28px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.paper-header p {
+    margin: 6px 0 0;
+    opacity: .75;
+}
+
+#closePrint {
+    height: 36px;
+    padding: 0 16px;
+    border: 1px solid #222;
+    background: transparent;
+    color: #111;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.paper-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 18px;
+    font-size: 14px;
+}
+
+.paper table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.paper th,
+.paper td {
+    border: 1px solid #333;
+    padding: 10px;
+    text-align: left;
+}
+
+.paper th {
+    background: rgba(0, 0, 0, 0.08);
+    text-transform: uppercase;
+    font-size: 12px;
+}

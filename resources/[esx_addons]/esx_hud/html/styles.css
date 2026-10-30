@@ -1,0 +1,510 @@
+:root{
+  --safe-left: 0px;
+  --safe-bottom: 0px;
+  --health:#00f8b9;
+  --armor:#38ced3;
+  --hunger:#ffa500;
+  --thirst:#38ced3;
+  --voice:#8e8e8e;
+  --track:rgba(255,255,255,.18);
+}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:transparent;font-family:"Barlow Condensed","Rajdhani","Roboto Condensed","Arial Narrow","Segoe UI",Arial,sans-serif;color:white;user-select:none}.hidden{display:none!important}
+
+/* Status HUD */
+.player-hud{position:absolute;left:calc(var(--safe-left) + 2.05vw);bottom:calc(var(--safe-bottom) + 2.05vh);display:flex;align-items:center;gap:.62vw;filter:drop-shadow(0 0 10px rgba(0,0,0,.8))}.status-item{width:2.28vw;height:2.28vw;min-width:39px;min-height:39px;position:relative;display:grid;place-items:center}.ring{--value:100;--color:#fff;position:absolute;inset:0;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--color) calc(var(--value)*1%), rgba(255,255,255,.16) 0);box-shadow:0 0 12px color-mix(in srgb,var(--color) 35%,transparent)}.ring:before{content:"";position:absolute;inset:5px;border-radius:50%;background:rgba(4,6,8,.72);border:1px solid rgba(255,255,255,.10)}.icon{position:relative;z-index:2;font-size:.88vw;line-height:1;text-shadow:0 0 8px rgba(255,255,255,.45)}.health .icon{font-size:1.05vw;color:#fff}.hunger .icon,.thirst .icon{font-size:.84vw;filter:grayscale(1) brightness(2.25)}.armor-ring{position:absolute;inset:-6px;border-radius:50%;background:conic-gradient(var(--armor) calc(var(--armorValue,0)*1%), transparent 0);opacity:0;filter:drop-shadow(0 0 8px rgba(56,206,211,.55));transition:opacity .18s ease}.armor-ring:before{content:"";position:absolute;inset:3px;border-radius:50%;background:transparent;border:3px solid rgba(0,0,0,.78)}.health.has-armor .armor-ring{opacity:1}.voice .ring{--color:var(--voice);--value:100;box-shadow:none}.voice.talking .ring{--color:var(--health);box-shadow:0 0 16px rgba(0,248,185,.5)}.health .ring{--color:var(--health)}.hunger .ring{--color:var(--hunger)}.thirst .ring{--color:var(--thirst)}
+
+/* HUD 1 – moderne SVG health gauge */
+.modern-health{
+  width:2.75vw;
+  height:2.75vw;
+  min-width:46px;
+  min-height:46px;
+}
+.health-widget{
+  position:relative;
+  width:100%;
+  height:100%;
+  filter:drop-shadow(0 4px 16px rgba(0,0,0,.55));
+}
+.health-gauge{
+  width:100%;
+  height:100%;
+  transform:rotate(-90deg);
+  overflow:visible;
+}
+.gauge-track{
+  fill:none;
+  stroke:rgba(255,255,255,.08);
+  stroke-width:5;
+}
+.gauge-armor{
+  fill:none;
+  stroke:url(#armorGradient);
+  stroke-width:4;
+  stroke-linecap:round;
+  stroke-dasharray:251.33;
+  stroke-dashoffset:251.33;
+  opacity:0;
+  transition:stroke-dashoffset .28s ease, opacity .2s ease;
+}
+.modern-health.has-armor .gauge-armor{opacity:1}
+.gauge-fill{
+  fill:none;
+  stroke:url(#healthGradient);
+  stroke-width:5;
+  stroke-linecap:round;
+  stroke-dasharray:226.19;
+  stroke-dashoffset:0;
+  filter:url(#healthGlow);
+  transition:stroke-dashoffset .28s ease, stroke .28s ease;
+}
+.modern-health.low-health .gauge-fill{
+  stroke:url(#healthLowGradient);
+  filter:url(#healthGlow);
+  animation:healthArcPulse 1.4s ease-in-out infinite;
+}
+.health-center{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:.08vh;
+  pointer-events:none;
+}
+.heart-svg{
+  width:.82vw;
+  height:.82vw;
+  min-width:14px;
+  min-height:14px;
+  fill:#fff;
+  opacity:.92;
+  filter:drop-shadow(0 0 6px rgba(0,248,185,.45));
+}
+.modern-health.low-health .heart-svg{
+  fill:#ff8a96;
+  filter:drop-shadow(0 0 6px rgba(255,75,92,.55));
+}
+.health-value{
+  font-size:max(9px,.52vw);
+  font-weight:600;
+  letter-spacing:.04em;
+  color:rgba(255,255,255,.88);
+  line-height:1;
+  text-shadow:0 0 8px rgba(0,248,185,.35);
+}
+.modern-health.low-health .health-value{color:#ffb3bb}
+@keyframes healthArcPulse{
+  0%,100%{opacity:1}
+  50%{opacity:.72}
+}
+
+/* Flyt HUD tilstand */
+body.edit-mode .hud-draggable{
+  outline:1px dashed rgba(0,248,185,.65);
+  outline-offset:4px;
+  cursor:grab;
+  z-index:40;
+}
+body.edit-mode .hud-draggable.dragging{
+  cursor:grabbing;
+  outline-color:#fff;
+  z-index:60;
+}
+.edit-mode-bar{
+  position:absolute;
+  top:1.2vh;
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  align-items:center;
+  gap:.8vw;
+  padding:.55vw 1vw;
+  border-radius:999px;
+  background:rgba(8,10,12,.92);
+  border:1px solid rgba(0,248,185,.28);
+  box-shadow:0 12px 40px rgba(0,0,0,.55);
+  z-index:100;
+  white-space:nowrap;
+}
+.edit-mode-text{
+  font-size:max(11px,.72vw);
+  color:rgba(255,255,255,.78);
+  letter-spacing:.03em;
+}
+.edit-mode-actions{display:flex;gap:.35vw}
+.edit-mode-bar button{
+  padding:.42vw .72vw;
+  border:0;
+  border-radius:999px;
+  background:var(--health);
+  color:#06100d;
+  font:inherit;
+  font-size:max(10px,.58vw);
+  font-weight:700;
+  cursor:pointer;
+}
+.edit-mode-bar button.secondary{
+  background:rgba(255,255,255,.08);
+  color:#fff;
+  border:1px solid rgba(255,255,255,.12);
+}
+.minimap-drag-zone{
+  position:absolute;
+  left:.4vw;
+  bottom:.8vh;
+  width:16.38vw;
+  height:18.3vh;
+  min-width:140px;
+  min-height:120px;
+  border:1px dashed rgba(0,248,185,.45);
+  border-radius:.45vw;
+  background:rgba(0,248,185,.05);
+  display:grid;
+  place-items:center;
+  z-index:35;
+}
+.minimap-drag-zone .drag-label{
+  font-size:.62vw;
+  font-weight:700;
+  letter-spacing:.16em;
+  color:rgba(0,248,185,.72);
+  text-shadow:0 0 10px rgba(0,248,185,.35);
+}
+.hud-menu-actions{flex-wrap:wrap}
+.hud-menu-actions button{flex:1 1 auto;min-width:110px}
+
+/* HUD 2 – NoPixel-inspireret */
+.player-hud-np{
+  position:absolute;
+  left:calc(var(--safe-left) + 1.55vw);
+  bottom:calc(var(--safe-bottom) + 2.05vh);
+  filter:drop-shadow(0 2px 10px rgba(0,0,0,.75));
+}
+.np-stack{
+  display:flex;
+  flex-direction:column;
+  gap:.34vh;
+}
+.np-row{
+  display:flex;
+  align-items:center;
+  gap:.28vw;
+}
+.np-icon-box{
+  width:1.85vw;
+  height:1.85vw;
+  min-width:32px;
+  min-height:32px;
+  display:grid;
+  place-items:center;
+  border-radius:.18vw;
+  background:rgba(15,15,15,.88);
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow:0 2px 8px rgba(0,0,0,.55);
+  flex-shrink:0;
+}
+.np-icon-box span{
+  font-size:.78vw;
+  line-height:1;
+}
+.np-icon-box.health span{color:#e8334a;text-shadow:0 0 8px rgba(232,51,74,.55)}
+.np-icon-box.hunger span{font-size:.72vw;filter:grayscale(1) brightness(1.8)}
+.np-icon-box.thirst span{font-size:.72vw}
+.np-icon-box.voice span{font-size:.72vw;color:rgba(255,255,255,.55)}
+.np-bar-track{
+  position:relative;
+  width:8.8vw;
+  min-width:150px;
+  height:1.85vw;
+  min-height:32px;
+  border-radius:.18vw;
+  background:rgba(15,15,15,.82);
+  border:1px solid rgba(255,255,255,.07);
+  overflow:hidden;
+  box-shadow:inset 0 1px 6px rgba(0,0,0,.55);
+}
+.np-bar-fill{
+  position:absolute;
+  inset:0 auto 0 0;
+  height:100%;
+  border-radius:.12vw;
+  transition:width .2s ease;
+}
+.np-bar-fill.health{
+  width:var(--healthValue,100%);
+  background:linear-gradient(90deg,#8b1528,#e8334a 45%,#ff5a6e);
+  box-shadow:inset 0 -2px 0 rgba(0,0,0,.18);
+}
+.np-bar-fill.health.low{background:linear-gradient(90deg,#5a0a14,#c41e32,#ff2438)}
+.np-bar-fill.armor{
+  width:var(--armorValue,0%);
+  background:linear-gradient(90deg,#1a4a7a,#2d7dd2 55%,#5eb3ff);
+}
+.np-icon-box.armor span{font-size:.72vw;color:#5eb3ff;text-shadow:0 0 8px rgba(94,179,255,.45)}
+.np-health.has-armor .np-bar-fill.armor{opacity:1}
+.np-bar-fill.hunger{
+  width:var(--hungerValue,100%);
+  background:linear-gradient(90deg,#8a5200,#d68100 55%,#ffa500);
+}
+.np-bar-fill.thirst{
+  width:var(--thirstValue,100%);
+  background:linear-gradient(90deg,#0f6674,#1a9aaa 55%,#38ced3);
+}
+.np-bar-fill.voice{
+  width:100%;
+  background:linear-gradient(90deg,rgba(80,80,80,.35),rgba(120,120,120,.25));
+}
+.np-voice.talking .np-bar-fill.voice{
+  background:linear-gradient(90deg,#0a6b50,#00f8b9 55%,#7dffe0);
+  box-shadow:0 0 12px rgba(0,248,185,.35);
+}
+.np-voice.talking .np-icon-box.voice span{color:#00f8b9;text-shadow:0 0 8px rgba(0,248,185,.6)}
+.np-bar-track.voice{opacity:.85}
+
+/* Modern compact vehicle HUD - bottom left */
+.vehicle-hud{
+  position:absolute;
+  left:calc(var(--safe-left) + 17.35vw);
+  bottom:calc(var(--safe-bottom) + 4.25vh);
+  display:grid;
+  grid-template-columns:auto auto auto;
+  grid-template-areas:
+    "gear speed fuel"
+    "gear rpm fuel"
+    "street street street";
+  align-items:end;
+  column-gap:.48vw;
+  row-gap:.22vh;
+  padding:.50vw .62vw .38vw .62vw;
+  border-radius:.55vw;
+  background:linear-gradient(90deg,rgba(0,0,0,.28),rgba(0,0,0,.10));
+  border:1px solid rgba(255,255,255,.045);
+  filter:drop-shadow(0 8px 22px rgba(0,0,0,.55));
+}
+.vehicle-hud:before{content:"";position:absolute;inset:0;border-radius:.55vw;background:radial-gradient(circle at 20% 60%,rgba(0,248,185,.08),transparent 45%);pointer-events:none}
+.gear-block{grid-area:gear;align-self:end;position:relative;z-index:1}.gear-title{font-size:.55vw;font-weight:500;color:rgba(255,255,255,.74);letter-spacing:.08em;margin-bottom:.2vh;text-shadow:0 1px 6px rgba(0,0,0,.9)}
+.gear-box{width:2.2vw;height:2.75vw;min-width:37px;min-height:48px;border-radius:.22vw;background:linear-gradient(180deg,rgba(0,248,185,.86),rgba(0,139,112,.82));box-shadow:0 0 13px rgba(0,248,185,.24);display:grid;place-items:center;color:#020506;border:1px solid rgba(255,255,255,.12)}
+.gear-box span{font-size:1.68vw;font-weight:300;line-height:.86}.gear-box small{font-size:.48vw;margin-top:-.78vh;opacity:.72}
+.speed-block{grid-area:speed;min-width:6.1vw;align-self:end;position:relative;z-index:1}.unit{text-align:left;font-size:.64vw;font-weight:500;margin-bottom:-.05vh;letter-spacing:.09em;color:rgba(255,255,255,.82);text-shadow:0 1px 7px rgba(0,0,0,.95)}
+.speed{font-family:"Barlow Condensed","Rajdhani","Roboto Condensed","Arial Narrow","Segoe UI",Arial,sans-serif;font-size:3.05vw;font-weight:300;line-height:.84;letter-spacing:.045em;text-align:left;color:rgba(255,255,255,.88);text-shadow:0 0 8px rgba(0,0,0,.9)}
+.speed .dim{color:rgba(255,255,255,.24);text-shadow:none}.rpm{grid-area:rpm;height:1.12vh;display:flex;align-items:center;gap:.16vw;margin-top:0;position:relative;z-index:1}.rpm-seg{width:.18vw;min-width:4px;height:1.08vh;border-radius:999px;background:rgba(255,255,255,.15);transition:background .08s linear,box-shadow .08s linear,opacity .08s linear}.rpm-seg.on.teal{background:var(--health);box-shadow:0 0 7px rgba(0,248,185,.38)}.rpm-seg.on.yellow{background:#ffe928;box-shadow:0 0 7px rgba(255,233,40,.4)}.rpm-seg.on.orange{background:#ff9d00;box-shadow:0 0 8px rgba(255,157,0,.44)}.rpm-seg.on.red{background:#ff2438;box-shadow:0 0 9px rgba(255,36,56,.56)}
+/* Clean vertical fuel meter */
+.fuel-block{
+  grid-area:fuel;
+  align-self:end;
+  position:relative;
+  z-index:1;
+  width:1.15vw;
+  min-width:18px;
+  height:3.55vw;
+  min-height:58px;
+  margin-left:.18vw;
+}
+.fuel-icon{display:none!important}
+.fuel-gauge{
+  position:relative;
+  width:100%;
+  height:100%;
+}
+.fuel-track{
+  position:absolute;
+  left:0;
+  top:.48vw;
+  bottom:.48vw;
+  width:.32vw;
+  min-width:6px;
+  border:1px solid rgba(255,255,255,.24);
+  background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(0,0,0,.34));
+  border-radius:999px;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.35),0 0 8px rgba(0,0,0,.5);
+}
+.fuel-fill{
+  position:absolute;
+  left:1px;
+  right:1px;
+  bottom:1px;
+  height:50%;
+  background:linear-gradient(180deg,#38ffd7,#00f8b9);
+  box-shadow:0 0 8px rgba(0,248,185,.42);
+  transition:height .18s ease,background .18s ease;
+  border-radius:999px;
+}
+.fuel-mark{
+  position:absolute;
+  left:-.10vw;
+  right:-.10vw;
+  top:50%;
+  height:2px;
+  transform:translateY(-50%);
+  border-radius:4px;
+  background:rgba(255,255,255,.82);
+  box-shadow:0 0 6px rgba(255,255,255,.35);
+}
+.fuel-label{
+  position:absolute;
+  left:.47vw;
+  font-size:.48vw;
+  font-weight:500;
+  color:rgba(255,255,255,.72);
+  line-height:1;
+  text-shadow:0 0 6px rgba(0,248,185,.22),0 1px 7px rgba(0,0,0,.9);
+}
+.fuel-label.top{top:.12vw}
+.fuel-label.bottom{bottom:.08vw}
+.street-block{grid-area:street;margin-top:.28vh;font-size:.68vw;font-weight:500;letter-spacing:.035em;color:rgba(255,255,255,.92);text-transform:uppercase;white-space:nowrap;text-shadow:0 0 7px rgba(0,248,185,.70),0 0 14px rgba(0,248,185,.34),0 1px 7px rgba(0,0,0,.95);line-height:1.05}.street-block i{display:inline-block;width:1px;height:.55vw;margin:0 .34vw;background:rgba(255,255,255,.55);box-shadow:0 0 6px rgba(0,248,185,.45);vertical-align:-.08vw}.street-block span:first-child{color:rgba(255,255,255,.78)}
+.hud-menu{
+  position:absolute;
+  inset:28% auto auto 50%;
+  transform:translateX(-50%);
+  width:min(420px,92vw);
+  padding:22px 24px 20px;
+  border-radius:16px;
+  background:linear-gradient(180deg,rgba(10,12,15,.96),rgba(6,8,10,.94));
+  border:1px solid rgba(255,255,255,.10);
+  box-shadow:0 25px 80px rgba(0,0,0,.65), inset 0 1px 0 rgba(255,255,255,.04);
+}
+.hud-menu-header{margin-bottom:18px}
+.hud-menu-home{
+  display:inline-block;
+  padding:4px 10px;
+  margin-bottom:8px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.14em;
+  color:#00f8b9;
+  background:rgba(0,248,185,.10);
+  border:1px solid rgba(0,248,185,.28);
+}
+.hud-menu h2{margin:0;font-size:22px;font-weight:600;letter-spacing:.02em}
+.hud-style-picker{margin-bottom:18px}
+.hud-style-label{margin:0 0 10px;font-size:13px;color:rgba(255,255,255,.62);letter-spacing:.04em}
+.hud-style-options{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.hud-style-btn{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:4px;
+  padding:14px 12px;
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:12px;
+  background:rgba(255,255,255,.03);
+  color:#fff;
+  cursor:pointer;
+  transition:border-color .15s ease, background .15s ease, transform .15s ease;
+}
+.hud-style-btn:hover{background:rgba(255,255,255,.06);transform:translateY(-1px)}
+.hud-style-btn.active{
+  border-color:rgba(0,248,185,.55);
+  background:rgba(0,248,185,.08);
+  box-shadow:0 0 0 1px rgba(0,248,185,.12), 0 8px 24px rgba(0,248,185,.08);
+}
+.hud-style-name{font-size:15px;font-weight:700}
+.hud-style-desc{font-size:11px;color:rgba(255,255,255,.55);text-align:left;line-height:1.35}
+.hud-menu-actions{display:flex;gap:8px}
+.hud-menu button{
+  padding:10px 14px;
+  border:0;
+  border-radius:10px;
+  background:var(--health);
+  color:#06100d;
+  font-weight:700;
+  cursor:pointer;
+}
+.hud-menu button.secondary{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.10)}
+@media(max-width:1280px){
+  .player-hud{gap:10px}
+  .status-item{width:39px;height:39px}
+  .modern-health{min-width:46px;min-height:46px}
+  .icon{font-size:15px}
+  .edit-mode-bar{flex-direction:column;white-space:normal;border-radius:14px;padding:10px 14px}
+  .edit-mode-actions{width:100%;justify-content:center}
+  .vehicle-hud{left:calc(var(--safe-left) + 222px);bottom:calc(var(--safe-bottom) + 54px)}
+  .speed{font-size:52px}
+  .gear-box span{font-size:28px}
+  .rpm-seg{width:4px}
+  .fuel-block{width:18px;height:58px}
+  .fuel-track{top:8px;bottom:8px;width:6px}
+  .fuel-label{left:10px;font-size:9px}
+  .street-block{font-size:12px}
+  .street-block i{height:10px}
+  .hud-style-options{grid-template-columns:1fr}
+}
+
+
+/* Fartbegrænser ikon - flyttet væk fra speed/tal og op ved fuel/top-right */
+.speedlimiter-icon{
+  position:absolute !important;
+  right:58px !important;
+  top:18px !important;
+  width:22px !important;
+  height:22px !important;
+  border-radius:7px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  color:#00f8b9 !important;
+  background:rgba(0,248,185,0.14) !important;
+  border:1.5px solid rgba(0,248,185,0.95) !important;
+  box-shadow:0 0 10px rgba(0,248,185,0.38), inset 0 0 8px rgba(0,248,185,0.12) !important;
+  text-shadow:0 0 8px rgba(0,248,185,0.95) !important;
+  pointer-events:none !important;
+  z-index:9999 !important;
+  transition:opacity .15s ease, transform .15s ease !important;
+}
+
+.speedlimiter-icon svg{
+  width:15px !important;
+  height:15px !important;
+  display:block !important;
+}
+
+.speedlimiter-icon.hidden{
+  opacity:0 !important;
+  transform:scale(.72) !important;
+}
+
+.speedlimiter-icon.active{
+  opacity:1 !important;
+  transform:scale(1) !important;
+}
+
+
+/* Lav benzin ikon - ligger under fartbegrænser ikonet, ikke oven i hastighedstallene */
+.lowfuel-icon{
+  position:absolute !important;
+  right:58px !important;
+  top:46px !important;
+  width:20px !important;
+  height:20px !important;
+  border-radius:6px !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  color:#ff3131 !important;
+  background:rgba(255,49,49,0.16) !important;
+  border:1px solid rgba(255,49,49,0.95) !important;
+  box-shadow:0 0 10px rgba(255,49,49,0.45), inset 0 0 8px rgba(255,49,49,0.10) !important;
+  pointer-events:none !important;
+  z-index:9999 !important;
+  transition:opacity .15s ease, transform .15s ease !important;
+}
+
+.lowfuel-icon svg{
+  width:13px !important;
+  height:13px !important;
+  display:block !important;
+}
+
+.lowfuel-icon.hidden{
+  opacity:0 !important;
+  transform:scale(.72) !important;
+}
+
+.lowfuel-icon.active{
+  opacity:1 !important;
+  transform:scale(1) !important;
+}

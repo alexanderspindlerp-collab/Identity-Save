@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Speed Radar</title>
+</head>
+<body>
+    <div id="radar" class="radar hidden">
+        <div id="scope" class="scope hidden">
+            <div class="vignette"></div>
+            <div class="crosshair horizontal"></div>
+            <div class="crosshair vertical"></div>
+            <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+            <div class="hint">SCROLL = ZOOM · VENSTREKLIK = GEM · BACKSPACE/ESC = LUK</div>
+        </div>
+
+        <div class="panel">
+            <div class="topline">FARTKONTROLS UDSTYR</div>
+            <div id="status" class="status">STANDBY</div>
+            <div class="grid">
+                <div><span class="label">FART</span><span id="speed" class="value">---</span><span class="unit">km/t</span></div>
+                <div><span class="label">AFSTAND</span><span id="distance" class="value">---</span><span class="unit">m</span></div>
+                <div class="platebox"><span class="label">PLADE</span><span id="plate" class="plate">---</span></div>
+                <div><span class="label">ZOOM</span><span id="zoom" class="value small">---</span><span class="unit">FOV</span></div>
+            </div>
+            <div class="history-title">TIDLIGERE MÅLINGER</div>
+            <div id="history" class="history"></div>
+        </div>
+    </div>
+
+    <div id="printout" class="printout hidden">
+        <div class="paper">
+            <div class="paper-header">
+                <div>
+                    <h1>Fartkontrol Udskrift</h1>
+                    <p>Officiel kopi af registrerede fartmålinger</p>
+                </div>
+                <button id="closePrint" type="button">Luk</button>
+            </div>
+            <div class="paper-meta">
+                <span><b>Betjent:</b> <span id="printOfficer">---</span></span>
+                <span><b>Oprettet:</b> <span id="printCreated">---</span></span>
+            </div>
+            <table>
+                <thead>
+                    <tr><th>#</th><th>Tidspunkt</th><th>Nummerplade</th><th>Fart</th><th>Afstand</th></tr>
+                </thead>
+                <tbody id="printRows"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

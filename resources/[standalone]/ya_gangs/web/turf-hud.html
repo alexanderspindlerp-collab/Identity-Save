@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="css/turf-hud.css" />
+</head>
+<body>
+  <div id="turf-hud" class="turf-hud hidden" aria-live="polite">
+    <div class="turf-card">
+      <div class="turf-accent"></div>
+      <div class="turf-body">
+        <div class="turf-top">
+          <div class="turf-title-wrap">
+            <span class="turf-kicker">Rival territorium</span>
+            <h2 id="turf-zone-name">Zone</h2>
+          </div>
+          <div class="turf-pct-ring">
+            <svg viewBox="0 0 44 44" class="turf-ring-svg" aria-hidden="true">
+              <circle class="turf-ring-bg" cx="22" cy="22" r="18"></circle>
+              <circle id="turf-ring-fill" class="turf-ring-fill" cx="22" cy="22" r="18"></circle>
+            </svg>
+            <span id="turf-pct" class="turf-pct">0%</span>
+          </div>
+        </div>
+        <div class="turf-bar-wrap">
+          <div class="turf-bar">
+            <div id="turf-bar-fill" class="turf-bar-fill"></div>
+            <div class="turf-bar-glow"></div>
+          </div>
+        </div>
+        <div class="turf-meta">
+          <span id="turf-points">0 / 500</span>
+          <span class="turf-dot">·</span>
+          <span class="turf-hint">24 timer til at vende tilbage efter du forlader zonen</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="js/turf-hud.js"></script>
+</body>
+</html>

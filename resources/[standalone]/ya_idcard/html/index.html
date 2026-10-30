@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ya_idcard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app" class="hidden">
+    <section class="card">
+      <header class="card-header">
+        <div class="badge">★</div>
+        <div class="title">
+          <h1>SAN ANDREAS</h1>
+          <p>IDENTIFIKATIONSKORT</p>
+        </div>
+        <div class="card-number">
+          <span>ID-KORT NR.</span>
+          <strong id="cardId">SA12345678</strong>
+        </div>
+      </header>
+
+      <main class="card-body">
+        <div class="person">
+          <div class="info"><i>👤</i><div><span>FULDE NAVN</span><strong id="fullName">John Andreasen</strong></div></div>
+          <div class="info"><i>▣</i><div><span>FØDSELSDATO</span><strong id="dob">22/12/1995</strong></div></div>
+          <div class="info"><i>♂</i><div><span>KØN</span><strong id="sex">Mand</strong></div></div>
+          <div class="info"><i>●</i><div><span>ADRESSE</span><strong id="address">Vinewood Blvd 123<br>Los Santos, SA 90001</strong></div></div>
+        </div>
+
+        <div class="licenses">
+          <h2>KØREKORT KATEGORIER</h2>
+          <div class="license-row" data-cat="B"><div class="icon">🚗</div><div><strong>Kategori B</strong><span>Personbil</span></div><div class="date"><span>TILDELT</span><b id="dateB">-</b></div></div>
+          <div class="license-row" data-cat="A"><div class="icon">🏍</div><div><strong>Kategori A</strong><span>Motorcykel</span></div><div class="date"><span>TILDELT</span><b id="dateA">-</b></div></div>
+          <div class="license-row" data-cat="C"><div class="icon">🚚</div><div><strong>Kategori C</strong><span>Større køretøj</span></div><div class="date"><span>TILDELT</span><b id="dateC">-</b></div></div>
+        </div>
+      </main>
+
+      <footer class="card-footer">
+        <div><span>UDSTEDT AF</span><strong id="issuer">San Andreas DMV</strong></div>
+        <div><span>UDSTEDT DEN</span><strong id="issued">22/05/2024</strong></div>
+        <div><span>ID GYLDIG TIL</span><strong id="expires">22/05/2034</strong></div>
+      </footer>
+    </section>
+
+    <div class="close-hint">
+      <kbd>E</kbd>
+      <span>Tryk for at lukke</span>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

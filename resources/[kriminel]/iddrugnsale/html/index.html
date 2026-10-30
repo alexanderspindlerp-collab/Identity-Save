@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="da" style="background: transparent;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="world-prompt" class="world-prompt hidden">
+        <span class="world-prompt__key" id="world-prompt-key">E</span>
+        <span class="world-prompt__text" id="world-prompt-text">Sælg Stoffer</span>
+    </div>
+
+    <!-- NPC Salg — kompakt pris-slider -->
+    <div id="sell-app" class="sell-dock hidden">
+        <div class="sell-dock__shell">
+            <p class="sell-dock__kicker">Gadehandel</p>
+            <h2 class="sell-dock__title" id="sell-offer-title">8x Kokain</h2>
+            <div class="sell-offer-tabs" id="sell-offer-tabs"></div>
+
+            <div class="sell-dock__price">
+                <span class="sell-dock__price-label">Pris per stk</span>
+                <strong id="sell-unit-price">0 kr</strong>
+                <p class="sell-dock__hint" id="sell-base-hint">Normal: 0 kr</p>
+                <p class="sell-dock__hint sell-dock__total" id="sell-total-hint">Total: 0 kr</p>
+            </div>
+
+            <div class="slider-block">
+                <div class="slider-labels">
+                    <span id="sell-min-label">Min</span>
+                    <span class="slider-hint">Træk for at forhandle</span>
+                    <span id="sell-max-label">Max</span>
+                </div>
+                <div class="price-slider-wrap">
+                    <div class="price-slider-fill" id="price-slider-fill"></div>
+                    <input type="range" id="price-slider" class="price-slider" min="0" max="100" value="50">
+                </div>
+                <div class="accept-bar">
+                    <span>Accept-chance</span>
+                    <div class="accept-track"><div class="accept-fill" id="accept-fill"></div></div>
+                    <strong id="accept-text">85%</strong>
+                </div>
+            </div>
+
+            <p class="sell-dock__tip">[Enter] tilbyd salg · [Esc] luk</p>
+            <button type="button" id="sell-confirm-btn" class="sell-dock__btn btn btn-primary">Tilbyd salg</button>
+        </div>
+    </div>
+
+    <!-- Admin -->
+    <div id="admin-app" class="panel panel--wide hidden">
+        <div class="panel-shell">
+            <header class="panel-header">
+                <div>
+                    <p class="panel-kicker">iddrugnsale</p>
+                    <h1>Admin — Narko system</h1>
+                </div>
+                <button type="button" class="icon-btn" id="admin-close" aria-label="Luk"><i class="fa-solid fa-xmark"></i></button>
+            </header>
+
+            <nav class="admin-nav" id="admin-nav">
+                <button type="button" class="admin-tab active" data-tab="farms"><i class="fa-solid fa-seedling"></i> Farme</button>
+                <button type="button" class="admin-tab" data-tab="process"><i class="fa-solid fa-flask"></i> Omdan</button>
+                <button type="button" class="admin-tab" data-tab="dealers"><i class="fa-solid fa-user-secret"></i> Dealere</button>
+                <button type="button" class="admin-tab" data-tab="prices"><i class="fa-solid fa-tags"></i> Priser</button>
+            </nav>
+
+            <div class="panel-body admin-body">
+                <section class="admin-section" id="tab-farms"></section>
+                <section class="admin-section hidden" id="tab-process"></section>
+                <section class="admin-section hidden" id="tab-dealers"></section>
+                <section class="admin-section hidden" id="tab-prices"></section>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

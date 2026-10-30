@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="da">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="css/app.css"><title>San MDT</title>
+</head>
+<body>
+<div id="app" class="hidden">
+  <aside class="sidebar">
+    <div class="brand"><div class="crest">⚜</div><div><b>MDT</b><span>Los Santos Politi</span></div></div>
+    <button class="nav active" data-page="dashboard">⌂ Forside</button>
+    <button class="nav" data-page="profiles">☷ Profiler</button>
+    <button class="nav" data-page="vehicles">▣ Køretøjsregister</button>
+    <button class="nav" data-page="incidents">△ Hændelser</button>
+    <button class="nav" data-page="reports">▤ Rapporter</button>
+    <button class="nav" data-page="charges">⚒ Sigtelser</button>
+    <button class="nav krim-main closed" data-page="krim_dna" type="button">◈ KRIM <span class="chev">⌄</span></button>
+    <div class="krim-dropdown closed">
+      <button class="krim-subnav" data-page="krim_dna" type="button">DNA Database</button>
+      <button class="krim-subnav" data-page="krim_fingerprint" type="button">Fingeraftryksdatabase</button>
+      <button class="krim-subnav" data-page="reports" type="button">Rapporter</button>
+    </div>
+    <button class="nav" data-page="fleet">▦ Flådestyring</button>
+    <button class="nav" data-page="files">▰ Organiserede Filer</button>
+    <button class="nav" data-page="invoices">▥ Fakturaer</button>
+    <button class="nav nsk-main closed" data-page="nsk_gangs" type="button">⬢ NSK <span class="chev">⌄</span></button>
+    <div class="nsk-dropdown closed">
+      <button class="nsk-subnav" data-page="nsk_gangs" type="button">Overblik / Bander</button>
+      <button class="nsk-subnav" data-page="nsk_observations" type="button">Observationer</button>
+      <button class="nsk-subnav" data-page="nsk_connections" type="button">Forbindelser</button>
+      <button class="nsk-subnav" data-page="nsk_activity" type="button">Aktivitetslog</button>
+    </div>
+    <button class="nav admin-main" data-page="admin_employees">⚙ Administration <span class="chev">⌄</span></button>
+    <div class="admin-dropdown">
+      <button class="admin-subnav" data-page="admin_tags">Tags</button>
+      <button class="admin-subnav" data-page="admin_roles">Roller</button>
+      <button class="admin-subnav" data-page="admin_employees">Ansatte</button>
+      <button class="admin-subnav" data-page="admin_logs">MDT-Logs</button>
+      <button class="admin-subnav disabled" data-page="admin_stats" disabled>Ansatte Statistik</button>
+      <button class="admin-subnav" data-page="admin_mail">Mail System</button>
+    </div>
+    <div class="time" id="clock">--</div>
+  </aside>
+  <main class="content">
+    <header class="topbar">
+      <div id="tabs" class="tabs"><button class="tab active" data-tab="dashboard">Forside <span>×</span></button><button id="topPlus" class="tab add" title="Forside">+</button></div>
+      <div class="user"><button id="selfProfileBtn" class="profile-top-btn" title="Min profil">👤<i id="profileNotifyDot"></i></button><span id="officerName">Betjent</span><b id="officerGrade">03</b><button id="close">●</button></div>
+    </header>
+
+    <section id="dashboard" class="page active dashboard-page dashboard-roles-page">
+      <div class="dashboard-hero">
+        <div class="dashboard-hero-text">
+          <span class="dashboard-hero-badge">FORSIDE</span>
+          <h2>Politiets overblik</h2>
+          <p>Efterlysninger, nyheder, BOLO og betjente — klik på en betjent for profil og awarder.</p>
+        </div>
+        <div class="dashboard-hero-stats">
+          <div class="dashboard-stat"><span>Betjente</span><b id="officerCount">0</b></div>
+          <div class="dashboard-stat"><span>Hændelser</span><b id="dashStatIncidents">0</b></div>
+          <div class="dashboard-stat"><span>Låste køretøjer</span><b id="dashStatLocked">0</b></div>
+        </div>
+      </div>
+      <div class="home-top dashboard-home-top">
+        <div class="home-panel">
+          <div class="panel-head"><b>⚠ EFTERLYSNINGER</b><span id="wantedCount">0</span></div>
+          <div id="wantedList" class="home-list"></div>
+        </div>
+        <div class="home-panel">
+          <div class="panel-head"><b>📰 NYHEDER</b><span id="newsCount">0</span></div>
+          <div id="newsList" class="home-list"></div>
+        </div>
+        <div class="home-panel">
+          <div class="panel-head"><b>⚠ EFTERLYSTE PERSONER</b><span id="boloCount">0</span></div>
+          <div id="boloList" class="home-list"></div>
+        </div>
+      </div>
+      <div class="officers-panel dashboard-roles-panel">
+        <div class="dashboard-roles-head">
+          <div class="section-title">♣ ROLLER & BETJENTE</div>
+          <div class="dashboard-roles-tools">
+            <input id="officerDirectorySearch" placeholder="Søg navn, tjenestenummer eller afdeling...">
+            <button id="officerDirectoryRefresh" class="save" type="button">Opdater</button>
+          </div>
+        </div>
+        <div id="officerGroups" class="officer-groups dashboard-role-grid"></div>
+      </div>
+    </section>
+
+    <section id="incidents" class="page incident-page incident-list-mode">
+      <div class="incident-head">
+        <div><b>Hændelse</b> <span id="incidentNumber" class="pill">---</span> <span id="incidentCreated">Opret eller vælg en hændelse</span> <span class="green" id="incidentOfficer"></span> <span id="saveState">Ingen ændringer at gemme</span></div>
+        <div class="head-actions"><button id="backToIncidentListTop" class="ghost">← Tilbage</button><button id="createReport" class="save secondary">Opret ny hændelse</button><button id="saveIncident" class="save">Gem Hændelse</button><button id="deleteIncident" class="danger">🗑</button></div>
+      </div>
+      <div class="incident-layout">
+        <aside class="incident-list">
+          <div class="incident-list-header"><label>HÆNDELSER</label><div class="incident-top-controls"><div class="searchrow incident-searchrow"><input id="incidentSearch" placeholder="Søg efter hændelse, nummer, titel..."><button id="searchIncidents">⌕</button></div><div class="incident-list-actions"><button id="createReportList" class="save secondary">+ Opret ny hændelse</button><button id="backToIncidentList" class="ghost hidden">← Tilbage</button></div></div></div>
+          <div id="recentIncidents"></div>
+        </aside>
+        <div class="editor-panel">
+          <div class="title-row"><input id="incidentTitle" placeholder="Titel fx Pistol, flugt, brugstyveri"><button class="mini">✎</button></div>
+          <div id="incidentEditor" contenteditable="true" spellcheck="false" data-placeholder="Beskrivelse af hændelsen..."></div>
+          <div class="editor-foot"><span>P</span><span id="wordCount">WORDS: 0</span><span id="charCount">CHARACTERS: 0</span></div>
+        </div>
+        <aside class="right-panel">
+          <div class="sidebox evidence-locker-box" data-list="objects"><h3>ADMINISTRER KONFISKEREDE OBJEKTER <button class="locker-open-btn" data-open-evidence-locker title="Åbn ox_inventory evidence locker">ÅBN LOCKER</button></h3><div class="items" id="objectsItems">Åbn evidence locker for at lægge konfiskerede ting ind på sagen.</div></div>
+          <div class="sidebox" data-list="criminals"><h3>TILFØJ KRIMINEL <button data-add="criminals">+</button></h3><div class="items" id="criminalsItems">Ingen kriminelle</div></div>
+          <div class="sidebox charges-incident-box" data-list="charges"><h3>SIGTELSER <button data-add="charges">+</button></h3><div class="items" id="chargesItems">Ingen sigtelser</div><div id="incidentPenaltySummary" class="penalty-summary"></div></div>
+          <div class="sidebox" data-list="tags"><h3>TAGS <button data-add="tags">+</button></h3><div class="items tag-items" id="tagsItems">Ingen tags</div></div>
+          <div class="sidebox" data-list="evidence"><h3>BEVISER <button data-add="evidence">+</button></h3><div class="items" id="evidenceItems">Ingen beviser</div></div>
+          <div class="sidebox" data-list="officers"><h3>BETJENTE INVOLVERET <button type="button" data-add="officers" title="Tilføj betjent">+</button></h3><div class="items" id="officersItems">Ingen betjente endnu — tryk + for at søge.</div></div>
+          <div class="sidebox" data-list="civilians"><h3>BORGERE INVOLVERET <button data-add="civilians">+</button></h3><div class="items" id="civiliansItems">Ingen borgere</div></div>
+          <div class="sidebox" data-list="vehicles"><h3>KØRETØJER <button data-add="vehicles">+</button></h3><div class="items" id="vehiclesItems">Ingen køretøjer</div></div>
+          <div class="sidebox" data-list="references"><h3>REFERENCER <button data-add="references">+</button></h3><div class="items" id="referencesItems">Ingen referencer</div></div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="vehicles" class="page vehicles-page vehicle-list-mode">
+      <div class="vehicle-registry-layout">
+        <aside class="vehicle-search-panel">
+          <h2>Køretøjsregister</h2>
+          <div class="vehicle-search-row">
+            <input id="vehicleRegistrySearch" placeholder="Søg nummerplade, model eller ejer...">
+            <button id="vehicleRegistrySearchBtn" class="save">⌕</button>
+          </div>
+          <div id="vehicleRegistryResults" class="vehicle-registry-results"><div class="vehicle-empty-search"><b>Ingen køretøjer fundet</b><span>Søg efter nummerplade, model eller ejer.</span></div></div>
+        </aside>
+        <div id="vehicleProfileView" class="vehicle-profile-view">
+          <div class="vehicle-profile-empty">Vælg et køretøj fra søgningen for at se data.</div>
+        </div>
+      </div>
+    </section>
+    <section id="profiles" class="page profiles-page">
+      <div class="profiles-layout">
+        <aside class="profile-search">
+          <h2>Profiler</h2>
+          <div class="searchrow"><input id="profileSearch" placeholder="Søg navn, CPR, telefon eller identifier"><button id="searchProfiles">⌕</button></div>
+          <div id="profileResults" class="profile-results"></div>
+        </aside>
+        <div class="profile-view" id="profileView">
+          <div class="empty-state">Søg efter en borger for at åbne profilen.</div>
+        </div>
+      </div>
+    </section>
+    <section id="reports" class="page reports-page">
+      <div class="reports-shell">
+        <div class="reports-header">
+          <div><h2>Rapporter</h2><p>Opret rapporter og link dem til hændelser, borgere og køretøjer.</p></div>
+          <div class="reports-actions"><input id="reportSearch" placeholder="Søg rapport, type, ID, titel..."><select id="reportTypeFilter"><option value="">Alle typer</option></select><button id="newReportBtn" class="save">+ Opret rapport</button></div>
+        </div>
+        <div id="reportsList" class="reports-list"></div>
+      </div>
+    </section>
+    <section id="charges" class="page charges-page">
+      <div class="charges-shell">
+        <div class="charges-header">
+          <div>
+            <h2>Sigtelser</h2>
+            <p>Alle sigtelser, paragraffer og straffe i MDT.</p>
+          </div>
+          <div class="charges-actions">
+            <input id="chargeSearch" placeholder="Søg §, navn, kategori eller beskrivelse...">
+            <select id="chargeCategoryFilter"><option value="">Alle kategorier</option></select>
+            <button id="addChargeBtn" class="save charge-admin-only">+ Tilføj sigtelse</button>
+          </div>
+        </div>
+        <div id="chargesSummary" class="charges-summary"></div>
+        <div id="chargesList" class="charges-list"></div>
+      </div>
+    </section>
+    <section id="krim_dna" class="page krim-page">
+      <div class="krim-shell">
+        <div class="krim-header">
+          <div><h2>DNA Database</h2><p>Registrerede DNA-prøver fra kriminalteknisk arbejde.</p></div>
+          <div class="krim-actions"><input id="krimDnaSearch" placeholder="Søg DNA-ID, navn eller CPR..."><button id="krimDnaRefresh" class="save">Opdater</button></div>
+        </div>
+        <div id="krimDnaList" class="krim-list"></div>
+      </div>
+    </section>
+    <section id="krim_fingerprint" class="page krim-page">
+      <div class="krim-shell">
+        <div class="krim-header">
+          <div><h2>Fingeraftryksdatabase</h2><p>Registrerede fingeraftryk fra politiets scanning.</p></div>
+          <div class="krim-actions"><input id="krimFpSearch" placeholder="Søg FP-ID, navn eller CPR..."><button id="krimFpRefresh" class="save">Opdater</button></div>
+        </div>
+        <div id="krimFpList" class="krim-list"></div>
+      </div>
+    </section>
+    <section id="fleet" class="page fleet-page fleet-live-page">
+      <div class="fleet-live-header">
+        <div class="fleet-live-title">FLÅDESTYRING</div>
+        <div class="fleet-live-top-actions">
+          <button id="fleetRefreshBtn" class="fleet-live-ghost">Opdater</button>
+          <button id="fleetNewTaskBtn" class="fleet-live-ghost">+ Opgave</button>
+          <button id="fleetAddServiceBtn" class="fleet-live-ghost">+ Service</button>
+          <button id="fleetAlertBtn" class="fleet-live-ghost">+ Alarm</button>
+          <button id="fleetAddVehicleBtn" class="fleet-live-add">+</button>
+          <label class="fleet-live-toggle">Vis Kort <input id="fleetMapToggle" type="checkbox" checked><span></span></label>
+          <label class="fleet-live-toggle fleet-calls-toggle">Opkald <input id="fleetCallsToggle" type="checkbox" checked><span></span></label>
+          <label class="fleet-live-toggle fleet-gang-territory-toggle" title="Vis NSK-registrerede bandezoner på kortet">Registrerede bande territorier <input id="fleetGangTerritoriesToggle" type="checkbox"><span></span></label>
+        </div>
+      </div>
+      <div class="fleet-live-grid">
+        <section class="fleet-live-map-panel">
+          <div class="fleet-live-panel-head">KORT <small id="fleetLastUpdate">--</small></div>
+          <div id="fleetMap" class="fleet-live-map"></div>
+        </section>
+        <aside class="fleet-live-units-panel">
+          <div class="fleet-live-panel-head"><span>KØRETØJER (<b id="fleetVehicleCount">0</b>)</span></div>
+          <div class="fleet-live-search"><input id="fleetSearch" placeholder="Søg køretøj, call sign eller tjenestenummer..."></div>
+          <div id="fleetUnits" class="fleet-live-list"></div>
+        </aside>
+      </div>
+      <div id="fleetInfoBox" class="fleet-live-drawer"></div>
+    </section>
+    <section id="nsk_gangs" class="page nsk-page nsk-ultra-page nsk-overview-page">
+      <div class="nsk-shell">
+      <div class="nsk-ultra-hero">
+        <div class="nsk-ultra-hero-main">
+          <span class="nsk-ultra-badge">NSK · INTELLIGENCE</span>
+          <h2>Bandeoverblik</h2>
+          <p>Live territoriekort, banderegister og trusselsmatrix — ét samlet efterforskningsdashboard.</p>
+        </div>
+        <div class="nsk-ultra-stats" id="nskHeroStats">
+          <div class="nsk-ultra-stat"><b id="nskStatGangs">0</b><small>Bander</small></div>
+          <div class="nsk-ultra-stat"><b id="nskStatMembers">0</b><small>Medlemmer</small></div>
+          <div class="nsk-ultra-stat"><b id="nskStatTerritories">0</b><small>Zoner</small></div>
+        </div>
+        <div class="nsk-ultra-actions">
+          <button id="nskRefreshBtn" class="nsk-btn ghost" type="button">↻ Opdater</button>
+          <button id="nskAddGangBtn" class="nsk-btn primary nsk-manage-only" type="button">+ Bande</button>
+          <button id="nskAddTerritoryBtn" class="nsk-btn accent nsk-manage-only" type="button">◎ Territorium</button>
+        </div>
+      </div>
+      <div class="nsk-ultra-grid nsk-overview-grid">
+        <section class="fleet-live-map-panel nsk-map-panel">
+          <div class="fleet-live-panel-head nsk-map-head">
+            <div><span class="nsk-map-title">BANDEKORT</span> <small id="nskMapHint">Klik et territorium · popup på kortet · venstreklik+træk flytter kortet</small></div>
+            <div class="nsk-map-toolbar nsk-manage-only">
+              <button type="button" id="nskMapPlaceBtn" class="nsk-btn accent">◎ Markér territorium</button>
+              <button type="button" id="nskMapCancelPlaceBtn" class="nsk-btn ghost hidden">Annuller</button>
+            </div>
+          </div>
+          <div id="nskMap" class="fleet-live-map nsk-live-map"></div>
+        </section>
+        <aside class="fleet-live-units-panel nsk-side-panel">
+          <div id="nskTerritorySidePanel" class="nsk-territory-side-panel hidden"></div>
+          <div id="nskGangBoardPanel" class="nsk-gang-board-panel hidden"></div>
+          <div class="nsk-tabs">
+            <button type="button" class="nsk-tab active" data-nsk-tab="gangs">Bander</button>
+            <button type="button" class="nsk-tab" data-nsk-tab="members">Medlemmer</button>
+            <button type="button" class="nsk-tab" data-nsk-tab="territories">Territorier</button>
+          </div>
+          <div id="nskPanelGangs" class="nsk-panel active"></div>
+          <div id="nskPanelMembers" class="nsk-panel"></div>
+          <div id="nskPanelTerritories" class="nsk-panel"></div>
+        </aside>
+      </div>
+      </div>
+    </section>
+    <section id="nsk_observations" class="page nsk-page nsk-obs-page">
+      <div class="nsk-obs-layout">
+        <aside class="nsk-obs-list-panel">
+          <div class="nsk-obs-list-head">
+            <div><b>Observationer</b><small>NSK · Field Intel</small></div>
+            <button id="nskObsRefresh" class="nsk-btn ghost sm" type="button">↻</button>
+          </div>
+          <div class="nsk-obs-list-tools">
+            <input id="nskObsSearch" class="nsk-input" placeholder="Søg emne, tekst, bande...">
+            <select id="nskObsFilter" class="nsk-input"><option value="">Alle typer</option><option value="gang">Bander</option><option value="person">Personer</option></select>
+            <select id="nskObsGangFilter" class="nsk-input"><option value="">Alle bander</option></select>
+          </div>
+          <div id="nskObsList" class="nsk-obs-list"></div>
+        </aside>
+        <div class="nsk-obs-editor-wrap">
+          <div class="incident-head nsk-obs-head">
+            <div><b>Observation</b> <span id="nskObsNumber" class="pill">NY</span> <span id="nskObsCreated" class="green">Opret eller vælg en observation</span> <span id="nskObsSaveState">Ingen ændringer at gemme</span></div>
+            <div class="head-actions">
+              <button id="nskObsNewBtn" class="ghost nsk-manage-only" type="button">Ny observation</button>
+              <button id="nskObsDeleteBtn" class="danger nsk-manage-only hidden" type="button">Slet</button>
+              <button id="nskObsSaveBtn" class="save nsk-manage-only" type="button">Gem observation</button>
+            </div>
+          </div>
+          <div class="nsk-obs-editor-layout">
+            <div class="editor-panel nsk-obs-editor-panel">
+              <div class="title-row"><input id="nskObsSubjectEdit" placeholder="Emne / overskrift på observationen"></div>
+              <div id="nskObsBodyEdit" class="incident-style-editor nsk-obs-body-editor" contenteditable="true" data-placeholder="Skriv observationen her — kilde, tidspunkt, lokation, personer, køretøjer, risikovurdering..."></div>
+            </div>
+            <aside class="right-panel nsk-obs-side">
+              <div class="sidebox">
+                <h3>MÅL</h3>
+                <div class="items nsk-obs-side-fields">
+                  <label>Type</label>
+                  <select id="nskObsTargetTypeEdit"><option value="gang">Bande</option><option value="person">Person</option></select>
+                  <div id="nskObsGangWrapEdit"><label>Bande</label><select id="nskObsGangEdit"><option value="">Vælg bande...</option></select></div>
+                  <div id="nskObsPersonWrapEdit" class="hidden">
+                    <label>Søg person</label>
+                    <input id="nskObsPersonSearchEdit" placeholder="Navn, telefon, fødselsdato...">
+                    <div id="nskObsPersonResultsEdit" class="criminal-results nsk-obs-person-results"><div class="profile-search-empty">Søg og vælg en person.</div></div>
+                    <div id="nskObsPersonPickBoxEdit" class="nsk-member-pick hidden"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="sidebox">
+                <h3>PRIORITET</h3>
+                <div class="items nsk-obs-side-fields">
+                  <select id="nskObsPriorityEdit"><option value="low">Lav</option><option value="normal" selected>Normal</option><option value="high">Høj</option><option value="critical">Kritisk</option></select>
+                </div>
+              </div>
+              <div class="sidebox">
+                <h3>NSK OFFICER</h3>
+                <div class="items nsk-obs-officer-box">
+                  <b id="nskObsOfficerName">Ukendt betjent</b>
+                  <small id="nskObsOfficerBadge">B0000</small>
+                  <em id="nskObsOfficerMeta">Afdeling · Rolle</em>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="nsk_connections" class="page nsk-page nsk-ultra-page">
+      <div class="nsk-shell">
+        <div class="nsk-ultra-hero compact">
+          <div class="nsk-ultra-hero-main">
+            <span class="nsk-ultra-badge">NSK · NETWORK MAP</span>
+            <h2>Forbindelser</h2>
+            <p>Allierede, rivaler, leverandører og konflikter mellem bandenetværk.</p>
+          </div>
+          <div class="nsk-ultra-toolbar">
+            <select id="nskConnGangFilter" class="nsk-input"><option value="">Alle bander</option></select>
+            <button id="nskConnRefresh" class="nsk-btn ghost" type="button">↻</button>
+            <button id="nskConnAddBtn" class="nsk-btn primary nsk-manage-only" type="button">+ Forbindelse</button>
+          </div>
+        </div>
+        <div id="nskConnGrid" class="nsk-ultra-network"></div>
+      </div>
+    </section>
+    <section id="nsk_activity" class="page nsk-page nsk-ultra-page">
+      <div class="nsk-shell">
+        <div class="nsk-ultra-hero compact">
+          <div class="nsk-ultra-hero-main">
+            <span class="nsk-ultra-badge">NSK · AUDIT TRAIL</span>
+            <h2>Aktivitetslog</h2>
+            <p>Fuld sporbarhed over bander, territorier, medlemmer og NSK-handlinger.</p>
+          </div>
+          <div class="nsk-ultra-toolbar">
+            <input id="nskActSearch" class="nsk-input" placeholder="Søg handling eller besked...">
+            <input id="nskActOfficer" class="nsk-input" placeholder="Betjent / tjenestenummer">
+            <button id="nskActRefresh" class="nsk-btn ghost" type="button">↻ Opdater</button>
+          </div>
+        </div>
+        <div id="nskActTimeline" class="nsk-ultra-timeline"></div>
+      </div>
+    </section>
+    <section id="files" class="page files-page">
+      <div class="files-shell">
+        <div class="files-header">
+          <div>
+            <h2>Organiserede Filer</h2>
+            <p>Efterforskningsmapper — sporinger, aflytninger og tildelte sager.</p>
+          </div>
+          <button id="filesRefreshBtn" class="save secondary">Opdater</button>
+        </div>
+        <div class="files-folder-nav">
+          <button class="files-folder-btn active" data-files-folder="tracks">Køretøjssporinger</button>
+          <button class="files-folder-btn" data-files-folder="wiretaps">Telefonaflytninger</button>
+          <button class="files-folder-btn" data-files-folder="assigned">Tildelte filer</button>
+        </div>
+        <div id="filesFolderTracks" class="files-folder-panel active">
+          <section class="files-box">
+            <div class="files-box-head"><h3>Køretøjssporinger</h3><span id="vehicleTrackCount">0</span></div>
+            <div id="vehicleTrackList" class="wiretap-archive-list"><div class="admin-empty">Ingen sporinger registreret endnu.</div></div>
+          </section>
+        </div>
+        <div id="filesFolderWiretaps" class="files-folder-panel">
+          <section class="files-box">
+            <div class="files-box-head"><h3>Telefonaflytninger</h3><span id="wiretapArchiveCount">0</span></div>
+            <div id="wiretapArchiveList" class="wiretap-archive-list"><div class="admin-empty">Ingen aflytninger gemt endnu.</div></div>
+          </section>
+        </div>
+        <div id="filesFolderAssigned" class="files-folder-panel">
+          <section class="files-box">
+            <div class="files-box-head"><h3>Tildelte filer</h3><span id="assignedFilesCount">0</span></div>
+            <div id="assignedFilesList" class="wiretap-archive-list"><div class="admin-empty">Ingen tildelte sager endnu.</div></div>
+          </section>
+        </div>
+      </div>
+      <div id="wiretapArchiveDetail" class="wiretap-archive-detail hidden">
+        <div class="wiretap-archive-detail-head">
+          <button id="wiretapArchiveBack" class="ghost">← Tilbage</button>
+          <div><b id="wiretapArchiveTitle">Aflytning</b><small id="wiretapArchiveMeta"></small></div>
+        </div>
+        <div id="wiretapArchiveTranscript" class="wiretap-archive-transcript"></div>
+      </div>
+    </section>
+    <section id="invoices" class="page empty">Fakturaer kommer som næste modul.</section>
+
+    <section id="admin_tags" class="page admin-page">
+      <div class="admin-toolbar"><h2>Tags</h2><div><button id="newTagBtn" class="save">+ Opret tag</button></div></div>
+      <p class="muted block">Opret tags til bande, gruppering, gadebande, rockerklub, mafia, forening eller ukendt. De kan vælges inde på hændelser.</p>
+      <div id="adminTagsList" class="admin-tags-list"></div>
+    </section>
+    <section id="admin_employees" class="page admin-page">
+      <div class="admin-toolbar"><h2>Medarbejdere</h2><div><input id="employeeSearch" placeholder="Søg medarbejder..."><select><option>Navn</option><option>Rolle</option><option>Afdeling</option></select><button id="refreshEmployees" class="save hidden">Opdater</button><button id="hireEmployeeBtn" class="save">+ Ansæt</button></div></div>
+      <div class="employee-table"><div class="employee-header"><span>NAVN / BILLEDE</span><span>TJENESTENUMMER</span><span>ROLLE</span><span>AFDELING</span><span>HANDLINGER</span></div><div id="employeesBody"></div></div>
+    </section>
+    <section id="admin_roles" class="page admin-page"><div class="admin-toolbar"><h2>Roller</h2><button id="newRoleBtn" class="save">+ Opret rolle</button></div><div id="rolesList" class="roles-list"></div></section>
+
+    <section id="admin_logs" class="page admin-page mdt-logs-page">
+      <div class="admin-toolbar"><h2>MDT-Logs</h2><div class="mdt-log-filters"><select id="auditCategory"><option>Alle</option></select><input id="auditOfficer" placeholder="Søg betjent / tjenestenummer..."><input id="auditSearch" placeholder="Søg handling, sag, dispatch..."><button id="auditRefresh" class="save">Opdater</button></div></div>
+      <p class="muted block">Central tidslinje over handlinger i MDT. Logs er kategoriseret og gemmes server-side.</p>
+      <div class="mdt-log-layout">
+        <aside class="mdt-log-categories" id="auditCategoryCards"></aside>
+        <section class="mdt-log-timeline" id="auditTimeline"><div class="admin-empty">Tryk Opdater for at hente logs.</div></section>
+      </div>
+    </section>
+    <section id="admin_stats" class="page admin-page"><div class="admin-toolbar"><h2>Ansatte Statistik</h2></div><div class="stats-grid"><div class="dash-card"><span>Ansatte</span><strong id="adminEmpCount">0</strong></div><div class="dash-card"><span>Afdelinger</span><strong>11</strong></div><div class="dash-card"><span>Roller</span><strong>11</strong></div></div></section>
+    <section id="admin_mail" class="page admin-page mail-system-page">
+      <div class="admin-toolbar"><h2>Mail System</h2></div>
+      <div class="mail-mode-cards">
+        <button type="button" class="mail-mode-card active" data-mail-mode="profile"><b>Søg Profil</b><small>Søg betjente og se mailhistorik</small></button>
+        <button type="button" class="mail-mode-card" data-mail-mode="send"><b>Send Mail</b><small>Send privat mail til valgt politi-profil</small></button>
+        <button type="button" class="mail-mode-card" data-mail-mode="news"><b>Nyheder</b><small>Send nyhed til Forside</small></button>
+      </div>
+      <div class="mail-system-content">
+        <section id="mailModeProfile" class="mail-mode-panel active">
+          <div class="mail-system-grid">
+            <div class="mail-compose">
+              <h3>Søg Profil</h3>
+              <label>Søg politi-profil</label>
+              <div class="mail-profile-search"><input id="mailProfileSearch" placeholder="Søg navn / tjenestenummer / identifier..."><button id="mailProfileSearchBtn" class="save" type="button">Søg</button></div>
+              <div id="mailProfileResults" class="mail-profile-results"><div class="admin-empty">Søg efter en politiprofil.</div></div>
+              <input id="mailPrivateRecipient" type="hidden">
+            </div>
+            <div class="mail-history-panel">
+              <div class="mail-history-head"><div><h3>Sendte mails til profil</h3><small id="mailHistoryProfile">Vælg en profil for at se historik.</small></div><button id="mailHistoryRefresh" class="save" type="button">Opdater</button></div>
+              <div id="mailHistoryList" class="mail-history-list"><div class="admin-empty">Ingen profil valgt.</div></div>
+            </div>
+          </div>
+        </section>
+        <section id="mailModeSend" class="mail-mode-panel">
+          <div class="mail-compose mail-wide-panel">
+            <h3>Send Mail</h3>
+            <div class="selected-mail-profile"><span>Valgt politi-profil</span><b id="selectedMailProfileLabel">Ingen profil valgt</b><small>Vælg modtager under Søg Profil først.</small></div>
+            <label>Titel / Emne</label><input id="privateMailSubject" placeholder="Emne">
+            <label>Mail indhold</label><textarea id="privateMailBody" placeholder="Skriv mailen her..."></textarea>
+            <button id="sendPrivateMailBtn" class="save">Send Mail</button>
+          </div>
+        </section>
+        <section id="mailModeNews" class="mail-mode-panel">
+          <div class="mail-system-grid">
+            <div class="mail-compose">
+              <h3>Nyheder</h3>
+              <label>Afdeling</label><input id="newsMailDepartment" placeholder="Fx Rigspolitiet, Patrulje, Færdselsstyring">
+              <label>Kort beskrivelse til forsiden</label><input id="newsMailSummary" placeholder="Kort tekst på nyheds-cardet">
+              <label>Titel</label><input id="newsMailSubject" placeholder="Titel på nyheden">
+              <label>Nyhedsindhold</label><textarea id="newsMailBody" placeholder="Skriv nyheden her..."></textarea>
+              <button id="sendNewsMailBtn" class="save">Send Nyhed</button>
+            </div>
+            <div class="mail-history-panel">
+              <div class="mail-history-head"><div><h3>Seneste nyheder</h3><small>Se hvem der har set / ikke set nyhederne.</small></div><button id="mailNewsRefresh" class="save" type="button">Opdater</button></div>
+              <div id="mailNewsList" class="mail-history-list"><div class="admin-empty">Tryk Opdater for at hente nyheder.</div></div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+    <section id="self_profile" class="page admin-page"><div id="selfProfileBox"></div></section>
+  </main>
+
+  <div id="mdtWiretapOverlay" class="mdt-wiretap-overlay hidden">
+    <div class="mdt-wiretap-panel">
+      <header class="mdt-wiretap-head">
+        <div>
+          <p class="mdt-wiretap-tag">MDT // SIGNAL</p>
+          <h2>Aflytning — <span id="mdtWiretapPhoneId">NT-000000</span></h2>
+        </div>
+        <button id="mdtWiretapMinimize" class="ghost" title="Skjul panel">−</button>
+      </header>
+      <div id="mdtWiretapLog" class="mdt-wiretap-log"></div>
+      <footer class="mdt-wiretap-foot">
+        <div class="mdt-wiretap-foot-left">
+          <p id="mdtWiretapStatus">Live intercept aktiv — nye beskeder opdateres automatisk.</p>
+          <p id="mdtWiretapOwner" class="mdt-wiretap-owner hidden"></p>
+          <div id="mdtWiretapGrantRow" class="mdt-wiretap-grant hidden">
+            <input id="mdtWiretapGrantId" placeholder="Identifier på kollega (char1:...)" autocomplete="off">
+            <button id="mdtWiretapGrantBtn" class="save secondary">Giv adgang</button>
+          </div>
+        </div>
+        <button id="mdtWiretapStop" class="save danger">Stop aflytning</button>
+      </footer>
+    </div>
+  </div>
+</div>
+<div id="modal" class="hidden"><div class="modal-card"><h2 id="modalTitle">Tilføj</h2><div id="modalFields"></div><div class="modal-actions"><button id="modalCancel">Annuller</button><button id="modalSave">Tilføj</button></div></div></div>
+<script src="js/app.js"></script>
+</body></html>

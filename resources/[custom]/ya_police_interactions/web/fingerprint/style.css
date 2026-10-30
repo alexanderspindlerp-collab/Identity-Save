@@ -1,0 +1,102 @@
+#fingerprintApp {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.fp-panel {
+  width: 520px;
+  background: #111827;
+  border: 1px solid #334155;
+  border-radius: 16px;
+  padding: 24px;
+  color: #e2e8f0;
+  box-shadow: 0 24px 80px rgba(0,0,0,.6);
+}
+
+.fp-panel header h2 {
+  font-size: 22px;
+  margin-bottom: 6px;
+}
+
+.fp-panel header p {
+  color: #94a3b8;
+  font-size: 13px;
+  margin-bottom: 20px;
+}
+
+.fp-pads {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.fp-pad {
+  aspect-ratio: 1;
+  border-radius: 12px;
+  border: 2px dashed #475569;
+  background: radial-gradient(circle at 50% 70%, rgba(30,58,138,.35), #0f172a);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  transition: border-color .2s, transform .15s;
+  position: relative;
+  overflow: hidden;
+}
+
+.fp-pad::after {
+  content: '';
+  position: absolute;
+  inset: 18%;
+  border-radius: 50%;
+  border: 2px solid rgba(148,163,184,.25);
+}
+
+.fp-pad.active {
+  border-color: #38bdf8;
+  transform: scale(0.98);
+}
+
+.fp-pad.done {
+  border-color: #22c55e;
+  border-style: solid;
+}
+
+.fp-pad span {
+  font-size: 12px;
+  color: #94a3b8;
+  z-index: 1;
+}
+
+.fp-pad strong {
+  font-size: 28px;
+  z-index: 1;
+}
+
+.fp-progress-wrap {
+  height: 8px;
+  background: #1e293b;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.fp-progress {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #2563eb, #38bdf8);
+  transition: width .08s linear;
+}
+
+.fp-status {
+  text-align: center;
+  font-size: 14px;
+  color: #cbd5e1;
+}

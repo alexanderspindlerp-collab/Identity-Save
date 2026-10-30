@@ -1,0 +1,20 @@
+CREATE TABLE IF NOT EXISTS `mdt_license_history` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `identifier` VARCHAR(80) NOT NULL,
+    `event_type` VARCHAR(24) NOT NULL DEFAULT 'points',
+    `points_delta` INT NOT NULL DEFAULT 0,
+    `points_after` INT NOT NULL DEFAULT 0,
+    `incident_id` INT NULL,
+    `incident_no` VARCHAR(32) NULL,
+    `charge_paragraph` VARCHAR(32) NULL,
+    `charge_name` VARCHAR(160) NULL,
+    `reason` VARCHAR(255) NULL,
+    `licenses_removed` VARCHAR(255) NULL,
+    `officer_name` VARCHAR(80) NULL,
+    `officer_identifier` VARCHAR(80) NULL,
+    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    KEY `identifier_idx` (`identifier`),
+    KEY `incident_idx` (`incident_id`),
+    KEY `created_at_idx` (`created_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

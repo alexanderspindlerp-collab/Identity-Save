@@ -1,0 +1,27 @@
+Older source copies are skipped because pinned ESX/ox versions are installed by the recipe:
+[core]/cron
+[core]/es_extended
+[core]/esx_chat_theme
+[core]/esx_context
+[core]/esx_identity
+[core]/esx_menu_default
+[core]/esx_menu_dialog
+[core]/esx_menu_list
+[core]/esx_multicharacter
+[core]/esx_progressbar
+[core]/esx_skin
+[core]/esx_textui
+[core]/skinchanger
+[esx_addons]/esx_addonaccount
+[esx_addons]/esx_billing
+[esx_addons]/esx_datastore
+[esx_addons]/esx_license
+[esx_addons]/esx_service
+[esx_addons]/esx_society
+[esx_addons]/esx_status
+[standalone]/ox_fuel
+[standalone]/ox_inventory
+[standalone]/ox_lib
+[standalone]/ox_target
+[standalone]/oxmysql
+[standalone]/pma-voice

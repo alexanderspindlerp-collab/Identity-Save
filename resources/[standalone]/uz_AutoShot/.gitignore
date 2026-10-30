@@ -1,0 +1,9 @@
+/node_modules
+/shots
+.yarn*
+yarn*
+
+# resources — only build output goes to git
+# resources/*
+# !resources/build
+# .gitignore

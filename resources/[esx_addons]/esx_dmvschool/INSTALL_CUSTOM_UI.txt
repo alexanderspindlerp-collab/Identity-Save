@@ -1,0 +1,12 @@
+INSTALLATION
+
+1. Backup din gamle esx_dmvschool mappe.
+2. Upload denne esx_dmvschool mappe til resources.
+3. Sørg for at server.cfg har: ensure esx_dmvschool
+4. Kør: refresh og restart esx_dmvschool
+
+FIX I DENNE VERSION
+- Bekræft-knappen poster nu til confirmPurchase via fetch.
+- client/main.lua lytter på confirmPurchase, schoolSelect og selectLicense.
+- Teori åbner efter køb; bil/motorcykel/truck starter køreprøve efter køb.
+- Kun teori vises før dmv-license er bestået.

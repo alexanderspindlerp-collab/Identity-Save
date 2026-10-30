@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YA Workshop</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/repair.css?v=1.9.2" />
+</head>
+<body>
+  <div id="app" class="hidden">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76Z"/></svg>
+        </div>
+        <h1 id="shop-title">Benny's</h1>
+      </div>
+      <div class="topbar-right">
+        <span class="vehicle-pill" id="vehicle-line">—</span>
+        <div class="topbar-cart">
+          <div class="cart-panel" id="cart-panel" hidden>
+            <div class="cart-panel-head"><span>Kurv</span><button type="button" class="text-btn" id="cart-clear">Tøm</button></div>
+            <div class="cart-lines" id="cart-list"></div>
+          </div>
+          <div class="cart-bar">
+            <button type="button" class="cart-toggle" id="cart-toggle" title="Kurv">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6h15l-1.5 9h-12L6 6z"/><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/></svg>
+              <span class="cart-badge" id="cart-count">0</span>
+            </button>
+            <span class="cart-total" id="cart-total">0</span>
+            <button type="button" class="order-btn" id="submit-btn" disabled>Bestil</button>
+          </div>
+        </div>
+        <button type="button" class="icon-btn" id="close-btn" title="Luk">✕</button>
+      </div>
+    </header>
+    <aside class="category-rail" id="category-rail"></aside>
+    <section class="options-dock" id="options-dock" hidden>
+      <div class="options-head">
+        <button type="button" class="back-btn" id="options-back" title="Tilbage">‹</button>
+        <h2 class="options-title" id="options-title">Valg</h2>
+        <div class="options-head-actions">
+          <button type="button" class="scroll-btn" id="scroll-left" title="Venstre">‹</button>
+          <button type="button" class="scroll-btn" id="scroll-right" title="Højre">›</button>
+        </div>
+      </div>
+      <div class="options-track-wrap"><div class="options-track" id="options-track"></div></div>
+      <div class="preview-bar" id="preview-bar" hidden>
+        <strong id="preview-label">—</strong>
+        <button type="button" class="preview-add-btn" id="preview-add-btn">+</button>
+      </div>
+      <p class="camera-hint">A/D drej · scroll zoom · mus i menu</p>
+    </section>
+    <div class="toast" id="toast" hidden></div>
+    <div class="rgb-modal" id="rgb-modal" hidden>
+      <div class="rgb-modal-panel">
+        <h3>RGB</h3>
+        <div class="rgb-target" role="radiogroup" aria-label="Laktype">
+          <label class="rgb-target-option"><input type="radio" name="rgb-target" value="color1" checked /><span>Primær</span></label>
+          <label class="rgb-target-option"><input type="radio" name="rgb-target" value="color2" /><span>Sekundær</span></label>
+        </div>
+        <input type="color" id="rgb-picker" value="#2ee8d6" />
+        <div class="rgb-modal-actions">
+          <button type="button" class="rgb-cancel-btn" id="rgb-cancel">✕</button>
+          <button type="button" class="preview-add-btn" id="rgb-apply">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="repair-app" class="hidden">
+
+    <!-- Venstre EMS-stak -->
+    <div class="rp-left-stack">
+    <aside class="rp-glass rp-items-panel">
+      <span class="rp-corner rp-corner--tl" aria-hidden="true"></span>
+      <span class="rp-corner rp-corner--tr" aria-hidden="true"></span>
+      <span class="rp-corner rp-corner--bl" aria-hidden="true"></span>
+      <span class="rp-corner rp-corner--br" aria-hidden="true"></span>
+
+      <header class="rp-panel-head">
+        <div class="rp-panel-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76Z"/></svg>
+        </div>
+        <div class="rp-panel-titles">
+          <h2 id="repair-title">Værksted</h2>
+          <p id="repair-subtitle">Find skader og reparer køretøjet</p>
+        </div>
+        <button type="button" class="rp-close" id="repair-close" title="Luk">✕</button>
+      </header>
+
+      <div class="rp-section-label">
+        <span>Reparationsdele</span>
+        <small id="repair-part-count">0 / 5</small>
+      </div>
+      <div class="rp-parts-list" id="repair-inv-list"></div>
+    </aside>
+
+    <!-- Panel 2: helbred (EMS under dele) -->
+    <aside class="rp-glass rp-health-panel">
+      <span class="rp-corner rp-corner--tl" aria-hidden="true"></span>
+      <span class="rp-corner rp-corner--tr" aria-hidden="true"></span>
+      <span class="rp-corner rp-corner--bl" aria-hidden="true"></span>
+      <span class="rp-corner rp-corner--br" aria-hidden="true"></span>
+
+      <div class="rp-section-label">
+        <span>Helbredstilstand</span>
+      </div>
+      <div class="rp-health-grid" id="repair-status-grid"></div>
+    </aside>
+    </div>
+
+    <!-- Nederst: bilinfo + handling -->
+    <footer class="rp-bottom-bar">
+      <div class="rp-vehicle-chip">
+        <span class="rp-vehicle-chip-label">Køretøj</span>
+        <strong id="repair-plate">—</strong>
+        <span id="repair-owner">—</span>
+      </div>
+      <span class="rp-footer-hint" id="repair-hint">Træk dele til ikonerne på bilen</span>
+      <button type="button" class="rp-submit" id="repair-submit" disabled>
+        Udfør reparation
+      </button>
+    </footer>
+
+    <!-- Flydende EMS-tags på bilen -->
+    <div class="rp-world-zones" id="repair-world-zones">
+      <div class="rp-zone repair-zone" data-zone="engine">
+        <div class="rp-zone-tag">
+          <div class="rp-zone-badge" aria-hidden="true"></div>
+          <div class="rp-zone-text">
+            <strong>Motor</strong>
+            <span class="rp-zone-pct" data-zone-pct="engine">Helbred: —</span>
+          </div>
+          <div class="repair-zone-slot" id="slot-engine"></div>
+        </div>
+        <div class="rp-zone-connector"><i class="rp-zone-line"></i><i class="rp-zone-dot"></i></div>
+      </div>
+
+      <div class="rp-zone repair-zone" data-zone="body">
+        <div class="rp-zone-tag">
+          <div class="rp-zone-badge" aria-hidden="true"></div>
+          <div class="rp-zone-text">
+            <strong>Karoseri</strong>
+            <span class="rp-zone-pct" data-zone-pct="body">Helbred: —</span>
+          </div>
+          <div class="repair-zone-slot" id="slot-body"></div>
+        </div>
+        <div class="rp-zone-connector"><i class="rp-zone-line"></i><i class="rp-zone-dot"></i></div>
+      </div>
+
+      <div class="rp-zone repair-zone" data-zone="windows">
+        <div class="rp-zone-tag">
+          <div class="rp-zone-badge" aria-hidden="true"></div>
+          <div class="rp-zone-text">
+            <strong>Vinduer</strong>
+            <span class="rp-zone-pct" data-zone-pct="body">Helbred: —</span>
+          </div>
+          <div class="repair-zone-slot" id="slot-windows"></div>
+        </div>
+        <div class="rp-zone-connector"><i class="rp-zone-line"></i><i class="rp-zone-dot"></i></div>
+      </div>
+
+      <div class="rp-zone repair-zone" data-zone="tank">
+        <div class="rp-zone-tag">
+          <div class="rp-zone-badge" aria-hidden="true"></div>
+          <div class="rp-zone-text">
+            <strong>Tank</strong>
+            <span class="rp-zone-pct" data-zone-pct="tank">Helbred: —</span>
+          </div>
+          <div class="repair-zone-slot" id="slot-tank"></div>
+        </div>
+        <div class="rp-zone-connector"><i class="rp-zone-line"></i><i class="rp-zone-dot"></i></div>
+      </div>
+
+      <div class="rp-zone repair-zone" data-zone="wheels">
+        <div class="rp-zone-tag">
+          <div class="rp-zone-badge" aria-hidden="true"></div>
+          <div class="rp-zone-text">
+            <strong>Hjul</strong>
+            <span class="rp-zone-pct" data-zone-pct="wheels">Helbred: —</span>
+          </div>
+          <div class="repair-zone-slot" id="slot-wheels"></div>
+        </div>
+        <div class="rp-zone-connector"><i class="rp-zone-line"></i><i class="rp-zone-dot"></i></div>
+      </div>
+
+      <div class="rp-zone repair-zone rp-zone--full" data-zone="universal">
+        <div class="rp-zone-tag rp-zone-tag--full">
+          <div class="rp-zone-badge rp-zone-badge--cyan" aria-hidden="true"></div>
+          <div class="rp-zone-text">
+            <strong>Hel bil</strong>
+            <span class="rp-zone-pct">Komplet reparation</span>
+          </div>
+          <div class="repair-zone-slot" id="slot-universal"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rp-toast" id="repair-toast" hidden></div>
+  </div>
+
+  <script src="js/app.js?v=1.9.2"></script>
+  <script src="js/repair.js?v=1.9.2"></script>
+</body>
+</html>

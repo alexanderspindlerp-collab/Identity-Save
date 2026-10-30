@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="lib/leaflet.css?v=1.2.8" />
+  <link rel="stylesheet" href="css/style.css?v=1.2.8" />
+  <link rel="stylesheet" href="css/gang.css?v=1.2.8" />
+  <link rel="stylesheet" href="css/gang-skilltree.css?v=1.2.8" />
+  <title>Tablet</title>
+</head>
+<body>
+  <div id="tablet-wrap" class="hidden">
+    <div class="tablet-device">
+      <div class="tablet-camera"></div>
+      <div class="tablet-screen">
+        <header class="statusbar">
+          <span id="clock">00:00</span>
+          <span class="status-right">
+            <span class="status-wifi" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 18a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Zm-4.2-2.1a6.5 6.5 0 0 1 8.4 0l1.2 1.2 1.4-1.4-1.2-1.2a9 9 0 0 0-11.6 0l-1.2 1.2 1.4 1.4 1.2-1.2Zm-4.2-4.2a11 11 0 0 1 16.8 0l1.2 1.2 1.4-1.4-1.2-1.2a13.5 13.5 0 0 0-20.4 0l-1.2 1.2 1.4 1.4 1.2-1.2Z"/></svg>
+            </span>
+            <span class="battery-wrap"><span class="battery-icon"></span><span id="battery">100%</span></span>
+            <button type="button" class="statusbar-close" data-action="close" title="Luk tablet" aria-label="Luk tablet">
+              <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10 10 10 0 0 0-10-10Zm3.54 12.46-1.08 1.08L12 13.08l-2.46 2.46-1.08-1.08L10.92 12 8.46 9.54l1.08-1.08L12 10.92l2.46-2.46 1.08 1.08L13.08 12Z"/></svg>
+            </button>
+          </span>
+        </header>
+
+        <main id="screen-root" class="screen-root"></main>
+        <div id="tablet-toast-host" class="tablet-toast-host" aria-live="polite"></div>
+
+        <button type="button" id="home-indicator" class="home-indicator-btn" data-nav="home" title="Hjem" aria-label="Gå til forsiden">
+          <span class="home-indicator-pill"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="lib/leaflet.js?v=1.2.8"></script>
+  <script src="js/gang-map.js?v=1.2.8"></script>
+  <script src="js/gang-skilltree.js?v=1.2.8"></script>
+  <script src="js/app.js?v=1.2.8"></script>
+</body>
+</html>

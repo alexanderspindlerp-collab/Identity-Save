@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS `ya_skilltree` (
+    `identifier` VARCHAR(60) NOT NULL,
+    `points` INT NOT NULL DEFAULT 0,
+    `unlocked` LONGTEXT NULL,
+    `updated_at` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`identifier`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

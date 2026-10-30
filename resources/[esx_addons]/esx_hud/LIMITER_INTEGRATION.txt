@@ -1,0 +1,21 @@
+
+CRUISECONTROL INTEGRATION
+
+Add this inside your cruisecontrol client.lua:
+
+SendNUIMessage({
+    action = 'speedLimiter',
+    enabled = true
+})
+
+When disabled:
+
+SendNUIMessage({
+    action = 'speedLimiter',
+    enabled = false
+})
+
+The HUD icon will now:
+- Match your teal HUD design
+- Appear when limiter is active
+- Disappear when limiter is disabled

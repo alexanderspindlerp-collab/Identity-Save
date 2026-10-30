@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main id="hud-root">
+    <!-- HUD 1: Custom (segmenteret health bar + ringe til resten) -->
+    <section id="playerHud" class="player-hud hud-variant hud-draggable hidden" data-hud-id="playerHud" data-variant="1">
+      <div class="status-item voice" id="voiceItem">
+        <div class="ring" id="voiceRing"><span class="icon">🎙</span></div>
+      </div>
+
+      <div class="status-item health modern-health" id="healthItem">
+        <div class="health-widget">
+          <svg class="health-gauge" viewBox="0 0 88 88" aria-hidden="true">
+            <defs>
+              <linearGradient id="healthGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#00f8b9"/>
+                <stop offset="55%" stop-color="#2dffd8"/>
+                <stop offset="100%" stop-color="#38ced3"/>
+              </linearGradient>
+              <linearGradient id="healthLowGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ff4b5c"/>
+                <stop offset="100%" stop-color="#ff8a96"/>
+              </linearGradient>
+              <linearGradient id="armorGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#1f7aa8"/>
+                <stop offset="100%" stop-color="#5eb3ff"/>
+              </linearGradient>
+              <filter id="healthGlow" x="-50%" y="-50%" width="200%" height="200%">
+                <feDropShadow dx="0" dy="0" stdDeviation="2.5" flood-color="#00f8b9" flood-opacity=".55"/>
+              </filter>
+            </defs>
+            <circle class="gauge-track" cx="44" cy="44" r="36"/>
+            <circle class="gauge-armor" id="armorArc" cx="44" cy="44" r="40"/>
+            <circle class="gauge-fill" id="healthArc" cx="44" cy="44" r="36"/>
+          </svg>
+          <div class="health-center">
+            <svg class="heart-svg" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 21s-7.5-4.7-9.7-9.1C.8 8.8 2.6 5.8 5.8 5.3c1.9-.3 3.7.5 4.9 2 1.2-1.5 3-2.3 4.9-2 3.2.5 5 3.5 3.5 6.6C19.5 16.3 12 21 12 21z"/>
+            </svg>
+            <span class="health-value" id="healthValue">100</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="status-item hunger" id="hungerItem">
+        <div class="ring" id="hungerRing"><span class="icon">🍔</span></div>
+      </div>
+      <div class="status-item thirst" id="thirstItem">
+        <div class="ring" id="thirstRing"><span class="icon">💧</span></div>
+      </div>
+    </section>
+
+    <!-- HUD 2: NoPixel-inspireret (horisontale barer) -->
+    <section id="playerHudNp" class="player-hud-np hud-variant hud-draggable hidden" data-hud-id="playerHudNp" data-variant="2">
+      <div class="np-stack">
+        <div class="np-row np-voice" id="npVoiceRow">
+          <div class="np-icon-box voice"><span>🎙</span></div>
+          <div class="np-bar-track voice">
+            <div class="np-bar-fill voice" id="npVoiceFill"></div>
+          </div>
+        </div>
+
+        <div class="np-row np-health" id="npHealthRow">
+          <div class="np-icon-box health"><span>♥</span></div>
+          <div class="np-bar-track health">
+            <div class="np-bar-fill health" id="npHealthFill"></div>
+          </div>
+        </div>
+
+        <div class="np-row np-armor hidden" id="npArmorRow">
+          <div class="np-icon-box armor"><span>🛡</span></div>
+          <div class="np-bar-track armor">
+            <div class="np-bar-fill armor" id="npArmorFill"></div>
+          </div>
+        </div>
+
+        <div class="np-row np-hunger" id="npHungerRow">
+          <div class="np-icon-box hunger"><span>🍔</span></div>
+          <div class="np-bar-track hunger">
+            <div class="np-bar-fill hunger" id="npHungerFill"></div>
+          </div>
+        </div>
+
+        <div class="np-row np-thirst" id="npThirstRow">
+          <div class="np-icon-box thirst"><span>💧</span></div>
+          <div class="np-bar-track thirst">
+            <div class="np-bar-fill thirst" id="npThirstFill"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="vehHud" class="vehicle-hud hud-draggable hidden" data-hud-id="vehHud">
+      <div class="gear-block">
+        <div class="gear-title">GEAR</div>
+        <div class="gear-box"><span id="gearValue">N</span><small>⚙</small></div>
+      </div>
+
+      <div class="speed-block">
+        <div class="unit" id="speedUnit">KMH</div>
+        <div class="speed" id="speedValue">000</div>
+        <div class="rpm" id="rpmBars"></div>
+      </div>
+
+      <div class="fuel-block">
+        <div class="fuel-gauge">
+          <span class="fuel-label top">F</span>
+          <div class="fuel-track"><div id="fuelFill" class="fuel-fill"></div><div class="fuel-mark"></div></div>
+          <span class="fuel-label bottom">E</span>
+        </div>
+      </div>
+
+      <div class="speedlimiter-icon hidden" id="limiterIcon" title="Fartbegrænser">
+        <svg viewBox="0 0 64 64" aria-hidden="true">
+          <path d="M18 48a22 22 0 1 1 28 0" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+          <path d="M32 33L44 21" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+          <circle cx="32" cy="33" r="4" fill="currentColor"/>
+          <path d="M14 32h8M42 32h8M20 20l5 5M44 20l-5 5" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+        </svg>
+      </div>
+
+      <div class="lowfuel-icon hidden" id="lowFuelIcon" title="Lav benzin">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="currentColor" d="M4 3h10a2 2 0 0 1 2 2v15H4V3zm2 2v5h8V5H6zm11 2h1.5L21 9.5V18a2 2 0 0 1-2 2h-1v-2h1V11l-2-2V7z"/>
+        </svg>
+      </div>
+
+      <div class="street-block" id="streetBlock">
+        <span id="streetDirection">SE</span><i></i><span id="streetName">WEST MIRROR DRIVE</span>
+      </div>
+    </section>
+
+    <div id="minimapDragZone" class="minimap-drag-zone hud-draggable hidden" data-hud-id="minimap">
+      <span class="drag-label">KORT</span>
+    </div>
+
+    <div id="editModeBar" class="edit-mode-bar hidden">
+      <span class="edit-mode-text">Træk HUD og kort · ENTER gemmer · ESC annullerer</span>
+      <div class="edit-mode-actions">
+        <button id="savePositions" type="button">Gem placering</button>
+        <button id="resetPositions" type="button" class="secondary">Nulstil alt</button>
+        <button id="cancelEditMode" type="button" class="secondary">Annuller</button>
+      </div>
+    </div>
+
+    <section id="hudMenu" class="hud-menu hidden">
+      <div class="hud-menu-header">
+        <span class="hud-menu-home">HOME</span>
+        <h2>HUD Indstillinger</h2>
+      </div>
+
+      <div class="hud-style-picker">
+        <p class="hud-style-label">Vælg HUD stil</p>
+        <div class="hud-style-options">
+          <button class="hud-style-btn active" id="selectHud1" data-style="1">
+            <span class="hud-style-name">HUD 1</span>
+            <span class="hud-style-desc">Custom · Moderne health gauge</span>
+          </button>
+          <button class="hud-style-btn" id="selectHud2" data-style="2">
+            <span class="hud-style-name">HUD 2</span>
+            <span class="hud-style-desc">NoPixel · Horisontale barer</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="hud-menu-actions">
+        <button id="toggleEditMode" type="button">Flyt HUD & Kort</button>
+        <button id="restartHud" type="button">Reset HUD</button>
+        <button id="closeMenu" type="button" class="secondary">Luk</button>
+      </div>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

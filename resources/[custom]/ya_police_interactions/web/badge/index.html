@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ya_police_interactions</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="../fingerprint/style.css" />
+</head>
+<body>
+  <div id="badgeApp" class="hidden">
+    <section class="badge-card">
+      <header class="badge-header">
+        <div class="badge-emblem">POLITI</div>
+        <div class="badge-title">
+          <h1>RIGSPOLITIET</h1>
+          <p>SAN ANDREAS</p>
+        </div>
+      </header>
+      <main class="badge-body">
+        <div class="badge-photo-wrap">
+          <img id="badgePhoto" src="" alt="Foto" />
+          <div id="badgePhotoFallback" class="badge-photo-fallback">👮</div>
+        </div>
+        <div class="badge-info">
+          <span>PNR</span>
+          <strong id="badgePnr">0000</strong>
+        </div>
+      </main>
+      <footer class="badge-footer">OFFICIELT POLITISKILT</footer>
+    </section>
+    <div class="hint"><kbd>E</kbd> Luk</div>
+  </div>
+
+  <div id="fingerprintApp" class="hidden">
+    <section class="fp-panel">
+      <header>
+        <h2>Fingeraftryksscanner</h2>
+        <p>Placer fingeren på de markerede felter og hold inde</p>
+      </header>
+      <div id="fpPads" class="fp-pads"></div>
+      <div class="fp-progress-wrap">
+        <div id="fpProgress" class="fp-progress"></div>
+      </div>
+      <p id="fpStatus" class="fp-status">Tryk og hold fingeren på scanneren</p>
+    </section>
+  </div>
+
+  <script src="script.js"></script>
+  <script src="../fingerprint/script.js"></script>
+</body>
+</html>

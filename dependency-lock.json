@@ -1,80 +1,12 @@
-[
-  {
-    "name": "cfx-server-data",
-    "repo": "citizenfx/cfx-server-data",
-    "ref": "c6afa3909c763e3327ed76825e78453286c99f05",
-    "url": "https://api.github.com/repos/citizenfx/cfx-server-data/zipball/c6afa3909c763e3327ed76825e78453286c99f05",
-    "bytes": 370416,
-    "sha256": "5ef2bdf3d2c892c9b3ed7c76943e37567089bdaa63679dba079079aaf045647e"
-  },
-  {
-    "name": "oxmysql",
-    "repo": "overextended/oxmysql",
-    "ref": "v2.14.3",
-    "url": "https://github.com/overextended/oxmysql/releases/download/v2.14.3/oxmysql.zip",
-    "bytes": 583927,
-    "sha256": "f6db8f612a36a8a75fccde300e8c4135696b5bbca5770cd7f26458949e1f7872"
-  },
-  {
-    "name": "ox_lib",
-    "repo": "overextended/ox_lib",
-    "ref": "v3.41.0",
-    "url": "https://github.com/overextended/ox_lib/releases/download/v3.41.0/ox_lib.zip",
-    "bytes": 3479914,
-    "sha256": "fc7cdbcf2860bcbf692172516de13339bb4e509a4d5ad367c26ea4a1a69e3193"
-  },
-  {
-    "name": "ox_target",
-    "repo": "overextended/ox_target",
-    "ref": "v1.18.1",
-    "url": "https://github.com/overextended/ox_target/releases/download/v1.18.1/ox_target.zip",
-    "bytes": 31856,
-    "sha256": "c404463199f5563399ff681b5e18641d8c9292d988c9c90b8e7e505b8e0768a7"
-  },
-  {
-    "name": "ox_inventory",
-    "repo": "overextended/ox_inventory",
-    "ref": "v2.48.1",
-    "url": "https://github.com/overextended/ox_inventory/releases/download/v2.48.1/ox_inventory.zip",
-    "bytes": 2612949,
-    "sha256": "33d5386b850e69fef8b7ac2ebf0e7ad78899e19299fe5e208cbc5c08d4cdae19"
-  },
-  {
-    "name": "pma-voice",
-    "repo": "AvarianKnight/pma-voice",
-    "ref": "6c9d96ed7a02e30912f1a0ce92629bf9afbbca8c",
-    "url": "https://api.github.com/repos/AvarianKnight/pma-voice/zipball/6c9d96ed7a02e30912f1a0ce92629bf9afbbca8c",
-    "bytes": 398401,
-    "sha256": "35edda21f9d74785d97c261c8e86a7b35b28fc8997fb8736c11a608333f22af9"
-  },
-  {
-    "name": "ox_fuel",
-    "repo": "overextended/ox_fuel",
-    "ref": "84f93ba2a3e24a663514c65cb9b3965c703ffed1",
-    "url": "https://api.github.com/repos/overextended/ox_fuel/zipball/84f93ba2a3e24a663514c65cb9b3965c703ffed1",
-    "bytes": 40789,
-    "sha256": "bcb6a9691b655deceb2e98ac92ab0d95420047675c011f78fdbdd816dba6b691"
-  },
-  {
-    "name": "PolyZone",
-    "repo": "mkafrin/PolyZone",
-    "ref": "0f9003080706d61ff29b9b3db5332d407632d4df",
-    "url": "https://api.github.com/repos/mkafrin/PolyZone/zipball/0f9003080706d61ff29b9b3db5332d407632d4df",
-    "bytes": 24303,
-    "sha256": "5316f5b4aef491e11bcb6f45fa82eb408a72bb2d12a16c77adf770a1eddef58f"
-  },
-  {
-    "name": "esx-core-compatible",
-    "repo": "esx-framework/esx_core",
-    "ref": "82188ac7616e6c1bfc96d82854b8ff3edf095526",
-    "url": "https://github.com/esx-framework/esx_core/tree/82188ac7616e6c1bfc96d82854b8ff3edf095526",
-    "sha256": "3d505c1c5e722735a999bb48871408a0b10eaed6a453d0ae05eded11f2c85532"
-  },
-  {
-    "name": "esx-addons-compatible",
-    "repo": "esx-framework/ESX-Legacy-Addons",
-    "ref": "973ae5390b61e3e6e6e2f507fe8d13cb8d2370af",
-    "url": "https://github.com/esx-framework/ESX-Legacy-Addons/tree/973ae5390b61e3e6e6e2f507fe8d13cb8d2370af",
-    "sha256": "731da6a92e9d26d28e01bc7fbc9e7992a90bc3d513d090b3b735c62653346c44"
-  }
-]
+{
+  "ESX-Legacy-Addons": "973ae5390b61e3e6e6e2f507fe8d13cb8d2370af",
+  "ESX-core": "82188ac7616e6c1bfc96d82854b8ff3edf095526",
+  "cfx-server-data": "c6afa3909c763e3327ed76825e78453286c99f05",
+  "oxmysql": "2.14.3",
+  "ox_lib": "3.41.0",
+  "ox_target": "1.18.1",
+  "ox_inventory": "2.48.1",
+  "pma-voice": "6c9d96ed7a02e30912f1a0ce92629bf9afbbca8c",
+  "ox_fuel": "84f93ba2a3e24a663514c65cb9b3965c703ffed1",
+  "PolyZone": "0f9003080706d61ff29b9b3db5332d407632d4df"
+}

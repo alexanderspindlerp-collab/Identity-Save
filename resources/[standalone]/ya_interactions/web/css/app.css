@@ -1,0 +1,306 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: transparent;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  color: #f5f5f7;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Side prompt (garage / impound) */
+#interaction-prompt {
+  position: fixed;
+  right: 28px;
+  top: 50%;
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-50%) translateX(14px);
+  transition: opacity 140ms ease, transform 140ms ease, visibility 140ms ease;
+  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.42));
+}
+
+#interaction-prompt.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(-50%) translateX(0);
+}
+
+.prompt-key {
+  min-width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  padding: 0 7px;
+  color: #38ffc0;
+  font-size: 15px;
+  font-weight: 800;
+  background: linear-gradient(180deg, rgba(11, 78, 60, 0.96), rgba(5, 49, 39, 0.96));
+  border: 2px solid #10e39a;
+  border-radius: 3px;
+}
+
+.prompt-label {
+  min-width: 118px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 22px;
+  font-size: 15px;
+  font-weight: 800;
+  background: rgba(13, 14, 18, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 3px;
+}
+
+/* ===================== DOCK MENU ===================== */
+#dock-menu {
+  position: fixed;
+  left: 50%;
+  bottom: 4.5vh;
+  transform: translateX(-50%) translateY(24px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 180ms ease, transform 220ms cubic-bezier(0.22, 1, 0.36, 1), visibility 180ms ease;
+}
+
+#dock-menu.visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+.dock-sub {
+  display: flex;
+  gap: 0;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 4px;
+  overflow: hidden;
+  background: rgba(8, 8, 10, 0.92);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+}
+
+.dock-sub.hidden {
+  display: none;
+}
+
+.dock-row {
+  display: flex;
+  align-items: stretch;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 4px;
+  overflow: hidden;
+  background: rgba(6, 6, 8, 0.94);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.55);
+}
+
+.dock-item {
+  position: relative;
+  width: 200px;
+  min-height: 118px;
+  padding: 14px 10px 12px;
+  border: none;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  transition: background 120ms ease, opacity 120ms ease;
+}
+
+.dock-item:last-child {
+  border-right: none;
+}
+
+.dock-item:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.dock-item.active {
+  background: rgba(255, 255, 255, 0.05);
+  outline: 1px solid rgba(255, 255, 255, 0.45);
+  outline-offset: -1px;
+  z-index: 1;
+}
+
+.dock-item.expanded::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 8px solid #fff;
+}
+
+.dock-sub .dock-item.active {
+  outline: 1px solid rgba(77, 255, 200, 0.55);
+}
+
+.dock-sub .dock-item.active::before {
+  display: none;
+}
+
+.dock-item.disabled {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.dock-icon {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  opacity: 0.95;
+}
+
+.dock-icon svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
+.dock-title {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.dock-desc {
+  font-size: 9px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.55);
+  text-align: center;
+  line-height: 1.25;
+  max-width: 110px;
+}
+
+.dock-sub .dock-item {
+  width: auto;
+  min-width: 140px;
+  min-height: 72px;
+  padding: 12px 16px;
+}
+
+.dock-sub .dock-desc {
+  display: none;
+}
+
+.dock-hint {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.45);
+  letter-spacing: 0.02em;
+}
+
+.hint-key {
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 700;
+}
+
+/* Skilltree kategori-kort over menuen */
+.dock-cards {
+  display: flex;
+  gap: 12px;
+  align-items: stretch;
+  justify-content: center;
+  margin-bottom: 12px;
+  pointer-events: auto;
+}
+
+.dock-cards.hidden {
+  display: none;
+}
+
+.skill-card {
+  position: relative;
+  width: 130px;
+  min-height: 200px;
+  padding: 14px 12px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 6px;
+  background: rgba(8, 8, 10, 0.94);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
+  transition: transform 140ms ease, border-color 140ms ease, background 140ms ease;
+  overflow: hidden;
+}
+
+.skill-card:hover:not(.disabled) {
+  transform: translateY(-3px);
+  border-color: rgba(255, 255, 255, 0.28);
+  background: rgba(12, 12, 16, 0.96);
+}
+
+.skill-card.disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+}
+
+.skill-card-accent {
+  width: 36px;
+  height: 4px;
+  border-radius: 99px;
+}
+
+.skill-card-title {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  line-height: 1.25;
+}
+
+.skill-card-desc {
+  flex: 1;
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.52);
+  line-height: 1.35;
+}
+
+.skill-card-action {
+  width: 100%;
+  padding: 8px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #4dffc8;
+}
+
+.skill-card.disabled .skill-card-action {
+  color: rgba(255, 255, 255, 0.4);
+}

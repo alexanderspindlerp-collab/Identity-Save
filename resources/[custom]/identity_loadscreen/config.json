@@ -1,0 +1,70 @@
+{
+  "serverName": "Identity",
+  "tagline": "Skab dit liv. Lev din historie.",
+  "subtitle": "Serious Roleplay · ESX Legacy",
+  "discord": "",
+  "website": "",
+  "tips": [
+    "Respekter alle spillere — in-character og out-of-character.",
+    "Brug /report hvis du har brug for hjælp fra staff.",
+    "Hold dig in-character i offentlige områder.",
+    "Din handling har konsekvenser i byen.",
+    "Læs serverreglerne på Discord før du spiller."
+  ],
+  "terminalLines": [
+    "> boot identity_core ... OK",
+    "> load esx_legacy ... OK",
+    "> sync player_state ... OK",
+    "> init economy_module ... OK",
+    "> mount world_stream ... OK",
+    "> connect voice_bridge ... OK",
+    "> verify character_data ... OK",
+    "> spawn los_santos ... pending",
+    "> load emotes_rpemotes ... OK",
+    "> await player_session ..."
+  ],
+  "loreMoments": [
+    { "year": "2024", "title": "Identity grundlagt", "text": "En by bygget på konsekvens, karakter og fællesskab." },
+    { "year": "RP", "title": "Serious Roleplay", "text": "Hver beslutning skriver næste kapitel i din historie." },
+    { "year": "LIVE", "title": "Levende verden", "text": "Politi, bander, civile — alle former byens puls." },
+    { "year": "YOU", "title": "Din karakter", "text": "Du ankommer ikke som statist. Du ankommer som nogen." }
+  ],
+  "recordings": [
+    {
+      "tag": "BODYCAM",
+      "id": "042",
+      "location": "Legion Square",
+      "time": "02:14",
+      "caption": "Nattevagt — rutinekontrol",
+      "image": "assets/recordings/01.jpg",
+      "tone": "teal"
+    },
+    {
+      "tag": "CCTV",
+      "id": "118",
+      "location": "Vinewood Blvd",
+      "time": "23:47",
+      "caption": "Trafik — aftenrush",
+      "image": "assets/recordings/02.jpg",
+      "tone": "blue"
+    },
+    {
+      "tag": "DASHCAM",
+      "id": "007",
+      "location": "Sandy Shores",
+      "time": "05:02",
+      "caption": "Patrulje — ørkenvej",
+      "image": "assets/recordings/03.jpg",
+      "tone": "amber"
+    },
+    {
+      "tag": "PHONE",
+      "id": "221",
+      "location": "Del Perro",
+      "time": "19:33",
+      "caption": "Civilt opslag — strandpromenaden",
+      "image": "assets/recordings/04.jpg",
+      "tone": "teal"
+    }
+  ]
+}

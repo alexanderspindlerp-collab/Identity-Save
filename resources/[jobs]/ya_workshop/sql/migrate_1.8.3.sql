@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS `ya_workshop_shop_locations` (
+  `shop_key` VARCHAR(48) NOT NULL,
+  `pos_x` DOUBLE NOT NULL,
+  `pos_y` DOUBLE NOT NULL,
+  `pos_z` DOUBLE NOT NULL,
+  `radius` DOUBLE NOT NULL DEFAULT 18.0,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`shop_key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

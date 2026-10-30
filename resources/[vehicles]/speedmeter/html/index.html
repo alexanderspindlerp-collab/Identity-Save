@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>CN Speedradar</title>
+</head>
+<body>
+    <main id="radar" class="hidden">
+        <section class="radar-box">
+            <div class="top labels">
+                <span>FRONT SCANNER</span>
+                <span id="recording">OPTAGER IKKE</span>
+            </div>
+
+            <div class="middle">
+                <div class="display plate" id="plate">--------</div>
+                <div class="display speed" id="targetSpeed">000</div>
+            </div>
+
+            <div class="bottom labels">
+                <span id="lockState">IKKE LÅST</span>
+                <span>PATRULJE FART</span>
+            </div>
+
+            <div class="bottom-values">
+                <div class="small-display muted">FRONT</div>
+                <div class="display patrol" id="patrolSpeed">000</div>
+            </div>
+        </section>
+    </main>
+    <script src="app.js"></script>
+</body>
+</html>
