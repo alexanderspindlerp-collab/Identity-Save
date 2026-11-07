@@ -3,9 +3,9 @@ $engine: 3
 $onesync: 'on'
 $minFxVersion: 12913
 name: Identity ESX
-version: 0.3.0
+version: 0.3.1
 author: Grizzy/Alex
-description: Identity custom ESX Legacy-base med danske scripts. Brug en tom database.
+description: Dansk ESX Legacy-base med danske scripts. Vælg en helt tom database. Efter en fejlet installation skal du vælge en ny tom database.
 tasks:
 - action: connect_database
 - action: download_github
